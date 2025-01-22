@@ -1,5 +1,6 @@
 import "./App.css";
 import HomeScreen from "./features/home/screens/HomeScreen";
+import TicketScreen from "./features/ticket/screens/TicketScreen";
 import Dashboard from "./layouts/partials/Dashboard";
 
 function App() {
@@ -7,7 +8,8 @@ function App() {
         <div>
             {/* <LoginScreen /> */}
             <HomeScreen>
-                <Dashboard />
+                {/* <Dashboard /> */}
+                <TicketScreen />
             </HomeScreen>
         </div>
     );
