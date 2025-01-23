@@ -5,9 +5,6 @@ import tickets from "../../assets/data/dummyData.json";
 import MessageHistory from "../../components/message-history/MessageHistory.comp";
 import UpdateTicket from "../../components/update-ticket/UpdateTicket.comp";
 import { useParams } from "react-router-dom";
-import { array } from "prop-types";
-
-const ticket = tickets[0]; //getting 1 static data
 
 const Ticket = () => {
     const { tId } = useParams();

@@ -3,7 +3,6 @@ import DefaultLayout from "./layouts/DefaultLayout";
 import Ticket from "./pages/ticket-list/Ticket";
 import Entry from "./pages/entry/Entry.page";
 import AddTicket from "./pages/new-ticket/AddTicket.page";
-import TicketLists from "./pages/ticket-list/TicketLists.page";
 import Dashboard from "./pages/dashboard/Dashboard.page";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/private-route/PrivateRoute.comp";
