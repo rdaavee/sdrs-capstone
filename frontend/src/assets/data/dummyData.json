@@ -1,37 +1,54 @@
 [
     {
         "id": 1,
-        "subject": "ORF Issue",
-        "course": "BSIT",
-        "status": "pending",
-        "addedAt": "2025-01-12"
+        "subject": "Official Registration Form (ORF)",
+        "course": "Bachelor of Science in Information Technology (BSIT)",
+        "status": "Pending",
+        "addedAt": "2025-01-12",
+        "history": [
+            {
+                "date": "01-01-2025",
+                "message": "can you fix this",
+                "messageBy": "david client"
+            },
+            {
+                "date": "01-01-2025",
+                "message": "no",
+                "messageBy": "benedict admin"
+            },
+            {
+                "date": "01-01-2025",
+                "message": "oki",
+                "messageBy": "david client"
+            }
+        ]
     },
     {
         "id": 2,
-        "subject": "ORF Issue",
-        "course": "BSIT",
-        "status": "pending",
-        "addedAt": "2025-01-12"
+        "subject": "Certificate of Matriculation (COM)",
+        "course": "Bachelor of Science in Computer Science (BSCS)",
+        "status": "In Progress",
+        "addedAt": "2025-01-13"
     },
     {
         "id": 3,
-        "subject": "ORF Issue",
-        "course": "BSIT",
-        "status": "pending",
-        "addedAt": "2025-01-12"
+        "subject": "ID Card Request",
+        "course": "Bachelor of Science in Information Technology (BSIT)",
+        "status": "Resolved",
+        "addedAt": "2025-01-14"
     },
     {
         "id": 4,
-        "subject": "ORF Issue",
-        "course": "BSIT",
-        "status": "pending",
-        "addedAt": "2025-01-12"
+        "subject": "Request for Good Moral Certificate",
+        "course": "Bachelor of Science in Information Systems (BSIS)",
+        "status": "Closed",
+        "addedAt": "2025-01-15"
     },
     {
         "id": 5,
-        "subject": "ORF Issue",
-        "course": "BSIT",
-        "status": "pending",
-        "addedAt": "2025-01-12"
+        "subject": "Transcript of Records (TOR)",
+        "course": "Bachelor of Science in Computer Engineering (BSCE)",
+        "status": "Pending",
+        "addedAt": "2025-01-16"
     }
 ]

@@ -1,6 +1,8 @@
 import "./App.css";
 import DefaultLayout from "./layouts/DefaultLayout";
-import TicketScreen from "./pages/ticket-list/Ticket.page";
+import Ticket from "./pages/ticket-list/Ticket";
+import TicketListScreen from "./pages/ticket/TicketList.page";
+import TicketScreen from "./components/add-ticket-form/AddTicketForm";
 
 function App() {
     return (
@@ -9,7 +11,8 @@ function App() {
             <DefaultLayout>
                 {/* <Dashboard /> */}
                 {/* <TicketScreen /> */}
-                <TicketScreen />
+                {/* <TicketListScreen /> */}
+                <Ticket />
             </DefaultLayout>
         </div>
     );
