@@ -1,32 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import PageBreadcrumb from "../../components/breadcrumb/Breadcrumb.comp";
+import SearchForm from "../../components/search-form/SearchForm.comp";
+import TicketTable from "../../components/ticket-table/TicketTable.comp";
 import tickets from "../../assets/data/dummyData.json";
-import { PageBreadcrumb } from "../../components/breadcrumb/Breadcrumb.comp";
-import { SearchForm } from "../../components/search-form/SearchForm.comp";
-import { TicketTable } from "../../components/ticket-table/TicketTable.comp";
 
-const TicketListScreen = () => {
+export const TicketListScreen = () => {
     const [str, setStr] = useState("");
-    const [displTickets, setDisplTickets] = useState();
-
-    useEffect(() => {
-        setDisplTickets(tickets);
-    }, [str, displTickets]);
-
+    const [displTicket, setDispTicket] = useState(tickets);
+    useEffect(() => {}, [str, displTicket]);
     const handleOnChange = (e) => {
-        const { value } = e.target.value;
+        const { value } = e.target;
         setStr(value);
         searchTicket(value);
-        console.log(e.target);
     };
-
     const searchTicket = (searchStr) => {
         const displayTickets = tickets.filter((row) =>
             row.subject.toLowerCase().includes(searchStr.toLowerCase())
         );
-        setDisplTickets(displayTickets);
+        setDispTicket(displayTickets);
     };
-
     return (
         <Container>
             <Row>
@@ -45,10 +38,11 @@ const TicketListScreen = () => {
             <hr />
             <Row>
                 <Col>
-                    <TicketTable tickets={tickets} />
+                    <TicketTable tickets={displTicket} />
                 </Col>
             </Row>
         </Container>
     );
 };
+
 export default TicketListScreen;
