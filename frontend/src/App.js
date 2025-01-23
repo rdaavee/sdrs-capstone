@@ -1,16 +1,16 @@
 import "./App.css";
-import HomeScreen from "./features/home/screens/HomeScreen";
-import TicketScreen from "./features/ticket/screens/TicketScreen";
-import Dashboard from "./layouts/partials/Dashboard";
+import DefaultLayout from "./layouts/DefaultLayout";
+import TicketScreen from "./pages/ticket-list/Ticket.page";
 
 function App() {
     return (
         <div>
             {/* <LoginScreen /> */}
-            <HomeScreen>
+            <DefaultLayout>
                 {/* <Dashboard /> */}
+                {/* <TicketScreen /> */}
                 <TicketScreen />
-            </HomeScreen>
+            </DefaultLayout>
         </div>
     );
 }

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import TicketForm from "../components/TicketForm";
-import BreadcrumbComponent from "../../../components/BreadcrumbComponent";
+import TicketForm from "../../components/add-ticket-form/AddTicketForm.comp";
 import { Container, Row, Col, Form } from "react-bootstrap";
-import { shortText } from "../../../utils/validation";
+import { shortText } from "../../utils/validation";
+import PageBreadcrumb from "../../components/breadcrumb/Breadcrumb.comp";
 
 const initialFormData = {
     subject: "",
@@ -50,7 +50,7 @@ const TicketScreen = () => {
         <Container>
             <Row>
                 <Col>
-                    <BreadcrumbComponent page="Add New Ticket" />
+                    <PageBreadcrumb page="Add New Ticket" />
                 </Col>
             </Row>
             <Row>

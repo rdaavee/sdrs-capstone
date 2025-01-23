@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
-const TicketForm = ({
+const AddTicketForm = ({
     handleOnSubmit,
     handleOnChange,
     formData,
@@ -114,11 +114,11 @@ const TicketForm = ({
     );
 };
 
-TicketForm.propTypes = {
+AddTicketForm.propTypes = {
     handleOnSubmit: PropTypes.func.isRequired,
     handleOnChange: PropTypes.func.isRequired,
     formData: PropTypes.object.isRequired,
     formDataError: PropTypes.object.isRequired,
 };
 
-export default TicketForm;
+export default AddTicketForm;

@@ -1,17 +1,16 @@
 import React from "react";
 import "../../App.css";
 import { Col, Container, Row, Button } from "react-bootstrap";
-
+import { PageBreadcrumb } from "../../components/breadcrumb/Breadcrumb.comp";
+import { TicketTable } from "../../components/ticket-table/TicketTable.comp";
 import tickets from "../../assets/data/dummyData.json";
-import BreadcrumbComponent from "../../components/BreadcrumbComponent";
-import TicketComponent from "../../features/ticket/components/TicketComponent";
 
 const Dashboard = () => {
     return (
         <Container>
             <Row>
                 <Col>
-                    <BreadcrumbComponent page="Dashboard" />
+                    <PageBreadcrumb page="Dashboard" />
                 </Col>
             </Row>
             <Row>
@@ -42,7 +41,7 @@ const Dashboard = () => {
             <hr />
             <Row>
                 <Col className="recent-tickets">
-                    <TicketComponent tickets={tickets} />
+                    <TicketTable tickets={tickets} />
                 </Col>
             </Row>
         </Container>

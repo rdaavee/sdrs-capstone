@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import LoginForm from "../components/LoginComponent";
-import ForgotPasswordForm from "../components/ForgotComponent";
+import { LoginForm } from "../../components/login/Login.comp";
+import ForgotPasswordForm from "../../components/forgot-password/ForgotPassword.comp";
 
-const LoginScreen = () => {
+const EntryPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loadLoginScreen, setloadLoginScreen] = useState("login");
@@ -62,4 +62,4 @@ const LoginScreen = () => {
     );
 };
 
-export default LoginScreen;
+export default EntryPage;
