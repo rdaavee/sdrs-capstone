@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { LoginForm } from "../../components/login/Login.comp";
+import LoginForm from "../../components/login/Login.comp";
 import ForgotPasswordForm from "../../components/forgot-password/ForgotPassword.comp";
 
 const EntryPage = () => {

@@ -4,6 +4,7 @@ import PageBreadcrumb from "../../components/breadcrumb/Breadcrumb.comp";
 import SearchForm from "../../components/search-form/SearchForm.comp";
 import TicketTable from "../../components/ticket-table/TicketTable.comp";
 import tickets from "../../assets/data/dummyData.json";
+import { Link } from "react-router-dom";
 
 export const TicketListScreen = () => {
     const [str, setStr] = useState("");
@@ -29,7 +30,14 @@ export const TicketListScreen = () => {
             </Row>
             <Row className="mt-4">
                 <Col>
-                    <Button variant="secondary">Add New Ticket</Button>
+                    <Link to="/add-ticket">
+                        <Button
+                            variant="secondary"
+                            style={{ fontSize: "11px", padding: "5px 15px" }}
+                        >
+                            Create New Ticket
+                        </Button>
+                    </Link>
                 </Col>
                 <Col className="text-right">
                     <SearchForm handleOnChange={handleOnChange} str={str} />

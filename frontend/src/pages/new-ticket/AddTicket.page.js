@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import TicketForm from "./AddTicketForm.comp";
+import TicketForm from "../../components/add-ticket-form/AddTicketForm.comp";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { shortText } from "../../utils/validation";
-import PageBreadcrumb from "../breadcrumb/Breadcrumb.comp";
+import PageBreadcrumb from "../../components/breadcrumb/Breadcrumb.comp";
 
 const initialFormData = {
     subject: "",
@@ -17,7 +17,7 @@ const initialFormError = {
     detail: false,
 };
 
-const TicketScreen = () => {
+const AddTicket = () => {
     const [formData, setFormData] = useState(initialFormData);
     const [formDataError, setFormDataError] = useState(initialFormError);
     useEffect(() => {}, [formData, formDataError]);
@@ -67,4 +67,4 @@ const TicketScreen = () => {
     );
 };
 
-export default TicketScreen;
+export default AddTicket;

@@ -1,6 +1,6 @@
 import React from "react";
-import { Navbar, Nav, NavbarBrand } from "react-bootstrap";
 import sdrsLogo from "../../assets/images/phinma-cservice-logo.png";
+import { Navbar, Nav, NavbarBrand } from "react-bootstrap";
 
 const Header = () => {
     return (
@@ -13,8 +13,8 @@ const Header = () => {
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
                     <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                    <Nav.Link href="/tickets">Tickets</Nav.Link>
-                    <Nav.Link href="/logout">Logout</Nav.Link>
+                    <Nav.Link href="/tickets">Ticket</Nav.Link>
+                    <Nav.Link href="/">Logout</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

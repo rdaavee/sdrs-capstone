@@ -1,19 +1,22 @@
 import React from "react";
 import Header from "./partials/Header.comp";
 import Footer from "./partials/Footer.comp";
+import { Outlet } from "react-router-dom";
 
-const DefaultLayout = ({ children }) => {
+function DefaultLayout({ children }) {
     return (
-        <div className="home-layout">
-            <div className="header">
+        <div>
+            <header className="header">
                 <Header />
-            </div>
-            <div className="main">{children}</div>
-            <div className="footer">
+            </header>
+            <main className="main">
+                <Outlet />
+            </main>
+            <footer className="footer">
                 <Footer />
-            </div>
+            </footer>
         </div>
     );
-};
+}
 
 export default DefaultLayout;
