@@ -1,35 +1,15 @@
 const express = require("express");
 const router = express.Router();
-
-const insertUser = require("../models/users/userModel");
-const { hashPassword } = require("../helpers/bcryptHelper");
+const { registerUser, loginUser } = require("../controllers/userController");
 
 router.all("/", (req, res, next) => {
-    // res.json({ message: "Return from user router" });
     next();
 });
 
-router.post("/", async (req, res) => {
-    const { name, address, course, phone, email, password } = req.body;
+// Register user
+router.post("/", registerUser);
 
-    try {
-        //hash password
-        const hashedPass = await hashPassword(password);
-
-        const newUserObj = {
-            name,
-            address,
-            course,
-            phone,
-            email,
-            password: hashedPass,
-        };
-        const result = await insertUser(newUserObj);
-        console.log(result);
-        res.json({ message: "New user created!", result });
-    } catch (error) {
-        res.json({ status: "Error", message: error.message });
-    }
-});
+// Login user
+router.post("/login", loginUser);
 
 module.exports = router;
