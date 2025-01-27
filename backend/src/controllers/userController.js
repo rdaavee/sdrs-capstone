@@ -1,5 +1,6 @@
 const { insertUser, getUserByEmail } = require("../models/users/userModel");
 const { hashPassword, comparePassword } = require("../helpers/bcryptHelper");
+const { createAccessJWT, createRefreshJWT } = require("../helpers/jwtHelper");
 
 exports.registerUser = async (req, res) => {
     const { name, address, course, phone, email, password } = req.body;
@@ -42,11 +43,20 @@ exports.loginUser = async (req, res) => {
         if (!passFromDb)
             return res.json({
                 status: "error",
-                message: "Invalid Credentials",
+                message: "Invalid Credentials!",
             });
 
         const result = await comparePassword(password, passFromDb);
-        console.log(result);
+
+        if (!result) {
+            return res.json({
+                status: "error",
+                message: "Invalid Password!",
+            });
+        }
+
+        const accessJWT = await createAccessJWT(user.email);
+        const refreshJWT = await createRefreshJWT(user.email);
 
         if (!user) {
             return res.json({
@@ -55,7 +65,12 @@ exports.loginUser = async (req, res) => {
             });
         }
 
-        res.json({ status: "success", message: "Login Successfully" });
+        res.json({
+            status: "success",
+            message: "Login Successfully",
+            accessJWT,
+            refreshJWT,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({
