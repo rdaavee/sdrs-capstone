@@ -8,6 +8,18 @@ const userSchema = new Schema({
     phone: { type: Number, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true, minlength: 8 },
+    refreshJWT: {
+        token: {
+            type: String,
+            maxlength: 500,
+            default: "",
+        },
+        addedAt: {
+            type: Date,
+            required: true,
+            default: Date.now(),
+        },
+    },
 });
 
 module.exports = { userSchema: mongoose.model("User", userSchema) };
