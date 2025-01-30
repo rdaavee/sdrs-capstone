@@ -2,6 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import logoImg from "../../assets/images/phinma-cservice-logo.png";
+import studentImg from "../../assets/images/login-img.svg";
+import "./Login.style.css";
+import "../../assets/fonts/fonts.css";
 
 const LoginForm = ({
     handleOnChange,
@@ -11,64 +15,175 @@ const LoginForm = ({
     password,
 }) => {
     return (
-        <Container className="d-flex justify-content-center align-items-center min-vh-100">
-            <Row className="w-100">
-                <Col xs={12} md={6} lg={4} className="mx-auto">
-                    <div className="login-form p-4 rounded shadow">
-                        <h1 className="text-center mb-4">Login</h1>
-                        <hr />
+        <div
+            style={{
+                position: "relative",
+                minHeight: "100vh",
+            }}
+        >
+            <div
+                style={{
+                    background: "linear-gradient(to right, #3A4F24, #E8E4E9)",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    zIndex: 1,
+                }}
+            ></div>
+            <div
+                className="d-none d-md-block"
+                style={{
+                    backgroundImage: `url(${studentImg})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    width: "60%",
+                    height: "100%",
+                    zIndex: 2,
+                }}
+            ></div>
+            <Container
+                style={{
+                    position: "relative",
+                    zIndex: 3,
+                }}
+            >
+                <Row
+                    className="justify-content-start align-items-center"
+                    style={{
+                        minHeight: "100vh",
+                        fontFamily: "TrebuchetMS, sans-serif",
+                    }}
+                >
+                    <Col md={6} lg={5}>
+                        <div
+                            style={{
+                                marginBottom: "50px",
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            <img
+                                src={logoImg}
+                                alt="UPang Logo"
+                                style={{ height: "90px" }}
+                            />
+                            <h2
+                                style={{
+                                    color: "#ffffff",
+                                    marginLeft: "30px",
+                                    marginTop: "15px",
+                                    fontWeight: "semi-bold",
+                                    letterSpacing: "3px",
+                                }}
+                            >
+                                UPang Online Helpdesk
+                            </h2>
+                        </div>
+                        <h4
+                            style={{
+                                color: "#FFD000",
+                                marginBottom: "20px",
+                            }}
+                        >
+                            Login to the helpdesk
+                        </h4>
+                        <p style={{ color: "#ffffff" }}>
+                            Enter the details below
+                        </p>
                         <Form autoComplete="off" onSubmit={handleOnSubmit}>
                             <Form.Group className="mb-3">
-                                <Form.Label>Email Address</Form.Label>
                                 <Form.Control
                                     type="email"
                                     name="email"
                                     placeholder="Email"
                                     onChange={handleOnChange}
                                     value={email}
+                                    style={{
+                                        borderRadius: "5px",
+                                        padding: "10px 20px",
+                                    }}
                                     required
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Password</Form.Label>
                                 <Form.Control
                                     type="password"
                                     name="password"
                                     placeholder="Password"
                                     onChange={handleOnChange}
                                     value={password}
+                                    className="placeholder-text"
+                                    style={{
+                                        borderRadius: "5px",
+                                        padding: "10px 20px",
+                                    }}
                                     required
                                 />
                             </Form.Group>
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                className="w-100"
+                            <Form.Group
+                                className="d-flex justify-content-between align-items-center mb-3"
+                                style={{ color: "#fff" }}
                             >
-                                Login
-                            </Button>
-                            <hr />
-                            <div className="text-center mt-3">
+                                <Form.Check
+                                    type="checkbox"
+                                    label="Remember me"
+                                />
                                 <a
-                                    href="#!"
+                                    href="!#"
                                     onClick={() => handleOnFormChange("reset")}
-                                    className="text-decoration-none"
+                                    style={{
+                                        color: "#fff",
+                                        textDecoration: "none",
+                                    }}
                                 >
                                     Forgot Password?
                                 </a>
+                            </Form.Group>
+                            <Button
+                                variant="warning"
+                                type="submit"
+                                style={{
+                                    backgroundColor: "#FFD000",
+                                    width: "100%",
+                                    borderRadius: "5px",
+                                    padding: "10px",
+                                    fontWeight: "bold",
+                                    color: "#ffffff",
+                                }}
+                            >
+                                Login
+                            </Button>
+                            <div className="mt-3">
+                                <p style={{ color: "#fff" }}>
+                                    Don’t have an account?{" "}
+                                    <a
+                                        href="/register"
+                                        style={{
+                                            color: "#FFD000",
+                                            textDecoration: "none",
+                                        }}
+                                    >
+                                        Register
+                                    </a>
+                                </p>
                             </div>
                         </Form>
-                    </div>
-                </Col>
-            </Row>
-        </Container>
+                    </Col>
+                </Row>
+            </Container>
+        </div>
     );
 };
 
 LoginForm.propTypes = {
     handleOnChange: PropTypes.func.isRequired,
     handleOnSubmit: PropTypes.func.isRequired,
-    handleFormChange: PropTypes.func.isRequired,
+    handleOnFormChange: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
 };

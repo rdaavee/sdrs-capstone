@@ -1,12 +1,16 @@
 import "./App.css";
 import DefaultLayout from "./layouts/DefaultLayout";
 import Ticket from "./pages/ticket-list/Ticket";
-import Entry from "./pages/entry/Entry.page";
+import Entry from "./pages/login/Login.page";
 import AddTicket from "./pages/new-ticket/AddTicket.page";
 import Dashboard from "./pages/dashboard/Dashboard.page";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/private-route/PrivateRoute.comp";
 import TicketListScreen from "./pages/ticket/TicketList.page";
+import RegistrationForm from "./components/registration/Registration.comp";
+import LoginForm from "./components/login/Login.comp";
+import LoginPage from "./pages/login/Login.page";
+import EntryPage from "./pages/entry/Entry.page";
 
 function App() {
     return (
@@ -14,7 +18,9 @@ function App() {
             <Router>
                 <Routes>
                     {/* Public Route */}
-                    <Route path="/" element={<Entry />} />
+                    <Route path="/" element={<EntryPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegistrationForm />} />
 
                     {/* Protected Routes wrapped in DefaultLayout */}
                     <Route element={<DefaultLayout />}>
@@ -26,14 +32,7 @@ function App() {
                                 </PrivateRoute>
                             }
                         />
-                        <Route
-                            path="/add-ticket"
-                            element={
-                                <PrivateRoute>
-                                    <AddTicket />
-                                </PrivateRoute>
-                            }
-                        />
+
                         <Route
                             path="/ticket"
                             element={

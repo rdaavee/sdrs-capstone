@@ -1,20 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import logoImg from "../../assets/images/phinma-cservice-logo.png";
 import studentImg from "../../assets/images/login-img.svg";
-import "./Login.style.css";
 import "../../assets/fonts/fonts.css";
+import { useNavigate } from "react-router-dom";
 
-const RegistrationForm = ({
-    handleOnChange,
-    handleOnSubmit,
-    handleOnFormChange,
-    name,
-    email,
-    password,
-}) => {
+const RegistrationForm = () => {
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(
+                "http://localhost:5000/user/register",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                }
+            );
+            const result = await response.json();
+            console.log(result);
+            navigate("/login");
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div
             style={{
@@ -91,19 +120,19 @@ const RegistrationForm = ({
                                 marginBottom: "20px",
                             }}
                         >
-                            Login to the helpdesk
+                            Register to have access
                         </h4>
                         <p style={{ color: "#ffffff" }}>
                             Enter the details below
                         </p>
-                        <Form autoComplete="off" onSubmit={handleOnSubmit}>
+                        <Form autoComplete="off" onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
                                 <Form.Control
                                     type="name"
                                     name="name"
                                     placeholder="Name"
-                                    onChange={handleOnChange}
-                                    value={name}
+                                    onChange={handleInputChange}
+                                    value={formData.name}
                                     style={{
                                         borderRadius: "5px",
                                         padding: "10px 20px",
@@ -116,8 +145,8 @@ const RegistrationForm = ({
                                     type="email"
                                     name="email"
                                     placeholder="Email"
-                                    onChange={handleOnChange}
-                                    value={email}
+                                    onChange={handleInputChange}
+                                    value={formData.email}
                                     style={{
                                         borderRadius: "5px",
                                         padding: "10px 20px",
@@ -130,8 +159,8 @@ const RegistrationForm = ({
                                     type="password"
                                     name="password"
                                     placeholder="Password"
-                                    onChange={handleOnChange}
-                                    value={password}
+                                    onChange={handleInputChange}
+                                    value={formData.password}
                                     className="placeholder-text"
                                     style={{
                                         borderRadius: "5px",
@@ -140,25 +169,7 @@ const RegistrationForm = ({
                                     required
                                 />
                             </Form.Group>
-                            <Form.Group
-                                className="d-flex justify-content-between align-items-center mb-3"
-                                style={{ color: "#fff" }}
-                            >
-                                <Form.Check
-                                    type="checkbox"
-                                    label="Remember me"
-                                />
-                                <a
-                                    href="!#"
-                                    onClick={() => handleOnFormChange("reset")}
-                                    style={{
-                                        color: "#fff",
-                                        textDecoration: "none",
-                                    }}
-                                >
-                                    Forgot Password?
-                                </a>
-                            </Form.Group>
+
                             <Button
                                 variant="warning"
                                 type="submit"
@@ -171,19 +182,19 @@ const RegistrationForm = ({
                                     color: "#ffffff",
                                 }}
                             >
-                                Login
+                                Submit
                             </Button>
                             <div className="mt-3">
                                 <p style={{ color: "#fff" }}>
-                                    Don’t have an account?{" "}
+                                    Already have an account?{" "}
                                     <a
-                                        href="!#"
+                                        href="/login"
                                         style={{
                                             color: "#FFD000",
                                             textDecoration: "none",
                                         }}
                                     >
-                                        Sign Up
+                                        Login
                                     </a>
                                 </p>
                             </div>
@@ -195,13 +206,12 @@ const RegistrationForm = ({
     );
 };
 
-RegistrationForm.propTypes = {
-    handleOnChange: PropTypes.func.isRequired,
-    handleOnSubmit: PropTypes.func.isRequired,
-    handleOnFormChange: PropTypes.func.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-};
+// RegistrationForm.propTypes = {
+//     handleOnChange: PropTypes.func.isRequired,
+//     handleOnSubmit: PropTypes.func.isRequired,
+//     name: PropTypes.string.isRequired,
+//     email: PropTypes.string.isRequired,
+//     password: PropTypes.string.isRequired,
+// };
 
 export default RegistrationForm;

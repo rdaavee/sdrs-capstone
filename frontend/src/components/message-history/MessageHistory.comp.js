@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "../../styles/message-history.style.css";
+import "./message-history.style.css";
 
 const MessageHistory = ({ message }) => {
     if (!message) return null;

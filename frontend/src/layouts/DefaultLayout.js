@@ -5,16 +5,16 @@ import { Outlet } from "react-router-dom";
 
 function DefaultLayout({ children }) {
     return (
-        <div>
+        <div style={{ backgroundColor: "#F8F9FA" }}>
             <header className="header">
                 <Header />
             </header>
             <main className="main">
                 <Outlet />
             </main>
-            <footer className="footer">
+            {/* <footer className="footer">
                 <Footer />
-            </footer>
+            </footer> */}
         </div>
     );
 }

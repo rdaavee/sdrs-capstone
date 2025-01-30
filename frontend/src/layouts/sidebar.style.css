@@ -1,0 +1,14 @@
+.active-link {
+    background-color: #ffd000 !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.sidebar-bg {
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+}
+
+.hamburger-bg {
+    background-color: #ffd000;
+    border: none;
+}
