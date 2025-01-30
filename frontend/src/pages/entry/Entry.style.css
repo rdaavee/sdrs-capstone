@@ -1,0 +1,184 @@
+/* Entry.style.css */
+
+/* Section container styles */
+.entry-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-image: linear-gradient(to bottom, rgba(113, 184, 40, 0.5), rgba(0, 128, 0, 0) 100%), url('../../assets/images/entry-img.svg'); /* Green gradient overlay */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  /* Image styling */
+  .entry-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0; /* Hide image since we're using a background image now */
+  }
+  
+.entry-overlay {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%; /* 80% of the section width */
+    padding: 0 1rem; /* Add padding for smaller screens */
+}
+
+.entry-overlay h2 {
+    color: white;
+    font-size: 5rem;
+    font-weight: bold;
+    width: 100%; /* Ensures h2 takes up full width */
+    margin: 0;
+}
+
+/* Responsive behavior for smaller screens */
+@media (max-width: 1024px) {
+    .entry-overlay {
+        width: 90%; /* Allow the overlay to expand more on medium screens */
+    }
+    .entry-overlay h2 {
+        font-size: 4rem; /* Slightly smaller font for medium-sized screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .entry-overlay {
+        width: 90%; /* 90% width on small screens */
+        top: 40%; /* Adjust top positioning for small screens */
+    }
+    .entry-overlay h2 {
+        font-size: 3rem; /* Reduce text size for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .entry-overlay {
+        width: 95%; /* Make the overlay almost full width on very small screens */
+        top: 35%; /* Further adjust top positioning */
+    }
+    .entry-overlay h2 {
+        font-size: 2.5rem; /* Smaller text for very small screens */
+    }
+}
+
+
+  .entry-button {
+    background-color: #3A4F24; 
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1rem;
+    padding: 1rem 3rem; /* Padding for top/bottom and left/right */
+    border: none; /* Remove default border */
+    border-radius: 9999px; /* Fully rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+    margin: 1rem auto; /* Center the button and add vertical space */
+    display: block; /* Make the button a block element to align it properly */
+  }
+  
+  /* Button hover effect */
+  .entry-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+  }
+
+#entry-message p{
+    text-align: center;
+}
+#entry-message h2{
+    text-align: center;
+}
+
+/*Guide 1 or (gray containers)*/
+.guide1-container {
+    background-color: rgba(0, 0, 0, 0.1); /* Light gray background */
+    width: 100%; /* Full width to remove side margins */
+    margin: 0; /* Ensure no margin */
+    padding: 2rem 0; /* Remove padding from sides but keep vertical padding */
+}
+
+.guide1-content {
+    display: flex;
+    flex-direction: column; /* Stack image and text vertically */
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Make sure it stretches to full width */
+    padding: 2rem;
+    text-align: center; /* Center the text */
+}
+
+.guide1-image {
+    max-width: 100%; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 0.5rem; /* Optional: rounded corners for the image */
+}
+
+.guide1-text {
+    max-width: 600px; /* Adjust width to make text look more compact */
+}
+
+.guide1-text h4 {
+    color: #333;
+}
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .guide1-content {
+        gap: 1rem;
+    }
+
+    .guide1-image {
+        max-width: 80%; /* Ensure the image isn't too large on small screens */
+    }
+}
+
+/*Guide 2 or (white containers)*/
+
+.guide2-container {
+    width: 100%; /* Full width to remove side margins */
+    margin: 0; /* Ensure no margin */
+    padding: 2rem 0; /* Remove padding from sides but keep vertical padding */
+}
+
+.guide2-content {
+    display: flex;
+    flex-direction: column; /* Stack image and text vertically */
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Make sure it stretches to full width */
+    padding: 2rem;
+    text-align: center; /* Center the text */
+}
+
+.guide2-image {
+    max-width: 100%; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 0.5rem; /* Optional: rounded corners for the image */
+}
+
+.guide2-text {
+    max-width: 600px; /* Adjust width to make text look more compact */
+}
+
+.guide2-text h4 {
+    color: #333;
+}
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .guide1-content {
+        gap: 1rem;
+    }
+
+    .guide2-image {
+        max-width: 80%; /* Ensure the image isn't too large on small screens */
+    }
+}
