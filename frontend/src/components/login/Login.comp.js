@@ -1,26 +1,126 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import {
+    Container,
+    Row,
+    Col,
+    Form,
+    Button,
+    Spinner,
+    Toast,
+    ToastContainer,
+} from "react-bootstrap";
 import logoImg from "../../assets/images/phinma-cservice-logo.png";
 import studentImg from "../../assets/images/login-img.svg";
 import "./Login.style.css";
 import "../../assets/fonts/fonts.css";
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = ({
-    handleOnChange,
-    handleOnSubmit,
-    handleOnFormChange,
-    email,
-    password,
-}) => {
+const LoginForm = ({ handleOnFormChange }) => {
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [showToast, setShowToast] = useState(false);
+    const [showErrorToast, setShowErrorToast] = useState(false);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+
+        try {
+            const response = await fetch("http://localhost:5000/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("token", result);
+                setShowToast(true);
+
+                setTimeout(() => {
+                    navigate("/dashboard");
+                }, 1500);
+            } else {
+                setError(result.message || "Login failed");
+                setShowErrorToast(true);
+            }
+        } catch (error) {
+            setError("An error occurred. Please try again.");
+            setShowErrorToast(true);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
-        <div
-            style={{
-                position: "relative",
-                minHeight: "100vh",
-            }}
-        >
+        <div style={{ position: "relative", minHeight: "100vh" }}>
+            {loading && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 9999,
+                    }}
+                >
+                    <Spinner
+                        animation="border"
+                        variant="success"
+                        style={{ width: "50px", height: "50px" }}
+                    />
+                </div>
+            )}
+
+            <ToastContainer position="top-end" className="p-3">
+                <Toast
+                    bg="success"
+                    show={showToast}
+                    onClose={() => setShowToast(false)}
+                    delay={2000}
+                    autohide
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">UPang Toast</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">
+                        Login Successful!
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
+
+            <ToastContainer position="top-end" className="p-3">
+                <Toast
+                    bg="danger"
+                    show={showErrorToast}
+                    onClose={() => setShowErrorToast(false)}
+                    delay={3000}
+                    autohide
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">Error</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">
+                        {error || "Invalid credentials. Please try again."}
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
+
             <div
                 style={{
                     background: "linear-gradient(to right, #3A4F24, #E8E4E9)",
@@ -46,12 +146,7 @@ const LoginForm = ({
                     zIndex: 2,
                 }}
             ></div>
-            <Container
-                style={{
-                    position: "relative",
-                    zIndex: 3,
-                }}
-            >
+            <Container style={{ position: "relative", zIndex: 3 }}>
                 <Row
                     className="justify-content-start align-items-center"
                     style={{
@@ -84,25 +179,20 @@ const LoginForm = ({
                                 UPang Online Helpdesk
                             </h2>
                         </div>
-                        <h4
-                            style={{
-                                color: "#FFD000",
-                                marginBottom: "20px",
-                            }}
-                        >
+                        <h4 style={{ color: "#FFD000", marginBottom: "20px" }}>
                             Login to the helpdesk
                         </h4>
                         <p style={{ color: "#ffffff" }}>
                             Enter the details below
                         </p>
-                        <Form autoComplete="off" onSubmit={handleOnSubmit}>
+                        <Form autoComplete="off" onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
                                 <Form.Control
                                     type="email"
                                     name="email"
                                     placeholder="Email"
-                                    onChange={handleOnChange}
-                                    value={email}
+                                    onChange={handleInputChange}
+                                    value={formData.email}
                                     style={{
                                         borderRadius: "5px",
                                         padding: "10px 20px",
@@ -115,8 +205,8 @@ const LoginForm = ({
                                     type="password"
                                     name="password"
                                     placeholder="Password"
-                                    onChange={handleOnChange}
-                                    value={password}
+                                    onChange={handleInputChange}
+                                    value={formData.password}
                                     className="placeholder-text"
                                     style={{
                                         borderRadius: "5px",
@@ -125,6 +215,16 @@ const LoginForm = ({
                                     required
                                 />
                             </Form.Group>
+                            {error && (
+                                <div
+                                    style={{
+                                        color: "red",
+                                        marginBottom: "10px",
+                                    }}
+                                >
+                                    {error}
+                                </div>
+                            )}
                             <Form.Group
                                 className="d-flex justify-content-between align-items-center mb-3"
                                 style={{ color: "#fff" }}
@@ -155,6 +255,7 @@ const LoginForm = ({
                                     fontWeight: "bold",
                                     color: "#ffffff",
                                 }}
+                                disabled={loading}
                             >
                                 Login
                             </Button>
@@ -166,6 +267,7 @@ const LoginForm = ({
                                         style={{
                                             color: "#FFD000",
                                             textDecoration: "none",
+                                            cursor: "pointer",
                                         }}
                                     >
                                         Register
@@ -181,11 +283,7 @@ const LoginForm = ({
 };
 
 LoginForm.propTypes = {
-    handleOnChange: PropTypes.func.isRequired,
-    handleOnSubmit: PropTypes.func.isRequired,
     handleOnFormChange: PropTypes.func.isRequired,
-    email: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
 };
 
 export default LoginForm;
