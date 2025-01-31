@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Nav, Offcanvas, Button } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import dashboardIconDark from "../../assets/icons/dashboard-icon-dark.svg";
 import createTicketIconDark from "../../assets/icons/create-ticket-icon-dark.svg";
@@ -15,10 +15,20 @@ import "../sidebar.style.css";
 
 const Sidebar = ({ children }) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [showSidebar, setShowSidebar] = useState(false);
     const [showHamburger, setShowHamburger] = useState(true);
 
+    // State for draggable hamburger button
+    const [isDragging, setIsDragging] = useState(false);
+    const [position, setPosition] = useState({ x: 20, y: 80 });
+
     const isActive = (path) => location.pathname === path;
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+    };
 
     const handleOpenSidebar = () => {
         setShowSidebar(true);
@@ -31,6 +41,34 @@ const Sidebar = ({ children }) => {
 
     const handleSidebarExited = () => {
         setShowHamburger(true);
+    };
+
+    // Draggable hamburger button logic
+    const handleMouseDown = (e) => {
+        setIsDragging(true);
+        // Calculate the initial offset between the mouse and the button's position
+        const offsetX = e.clientX - position.x;
+        const offsetY = e.clientY - position.y;
+
+        const handleMouseMove = (e) => {
+            if (isDragging) {
+                // Update the button's position based on the mouse movement
+                const newX = e.clientX - offsetX;
+                const newY = e.clientY - offsetY;
+                setPosition({ x: newX, y: newY });
+            }
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+            // Remove the event listeners when dragging stops
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        // Add event listeners for mouse movement and release
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
     };
 
     return (
@@ -113,7 +151,10 @@ const Sidebar = ({ children }) => {
                         Ticket Status
                     </Nav.Link>
                     <Nav.Link
-                        href="/logout"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleLogout();
+                        }}
                         className="d-flex align-items-center text-dark mt-auto"
                         style={{ padding: "10px" }}
                     >
@@ -215,7 +256,10 @@ const Sidebar = ({ children }) => {
                             Ticket Status
                         </Nav.Link>
                         <Nav.Link
-                            href="/logout"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleLogout();
+                            }}
                             className="d-flex align-items-center text-dark mt-auto"
                             style={{ padding: "10px" }}
                         >
@@ -229,12 +273,14 @@ const Sidebar = ({ children }) => {
                 <Button
                     className="d-md-none position-fixed hamburger-bg"
                     style={{
-                        top: "80px",
-                        left: "20px",
+                        top: `${position.y}px`,
+                        left: `${position.x}px`,
                         zIndex: 1050,
                         opacity: "18%",
+                        cursor: "grab",
                     }}
                     onClick={handleOpenSidebar}
+                    onMouseDown={handleMouseDown}
                 >
                     ☰
                 </Button>

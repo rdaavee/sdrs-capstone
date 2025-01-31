@@ -32,9 +32,11 @@ const EntryPage = () => {
                     Good News for PHINMA UPang students! <br />
                     UPang Online Helpdesk is already ready to assist you.
                 </h2>
-                <button className="entry-button">Visit UPang Helpdesk</button>
+                <button className="entry-button mt-5">
+                    Visit UPang Helpdesk
+                </button>
                 <br />
-                <p>
+                <p className="mb-5">
                     The PHINMA-UPang SDRS in curently going under testing to
                     ready to assist you with all of your online credentials
                     requests. May it be your "Form 137/138, Certificate,
@@ -52,7 +54,7 @@ const EntryPage = () => {
                     <img
                         src={guidePic1}
                         alt='Click on "Visit UPang Helpdesk"'
-                        className="guide1-image"
+                        className="guide1-image mb-5"
                     />
                     <div className="guide1-text">
                         <h4>
@@ -68,7 +70,7 @@ const EntryPage = () => {
                     <img
                         src={guidePic2}
                         alt="Login to your PHINMA UPang Account"
-                        className="guide2-image"
+                        className="guide2-image mb-5"
                     />
                     <div className="guide1-text">
                         <h4>
@@ -84,7 +86,7 @@ const EntryPage = () => {
                     <img
                         src={guidePic3}
                         alt='Click on "Create Ticket" and Fill up the form'
-                        className="guide1-image"
+                        className="guide1-image mb-5"
                     />
                     <div className="guide1-text">
                         <h4>

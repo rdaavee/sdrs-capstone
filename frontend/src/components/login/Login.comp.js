@@ -62,6 +62,23 @@ const LoginForm = ({ handleOnFormChange }) => {
         }
     };
 
+    const handleLogoClick = () => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            navigate("/");
+        }, 1500);
+    };
+
+    const handleRegisterClick = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+            navigate("/register");
+        }, 1000);
+    };
+
     return (
         <div style={{ position: "relative", minHeight: "100vh" }}>
             {loading && (
@@ -160,7 +177,9 @@ const LoginForm = ({ handleOnFormChange }) => {
                                 marginBottom: "50px",
                                 display: "flex",
                                 alignItems: "center",
+                                cursor: "pointer",
                             }}
+                            onClick={handleLogoClick}
                         >
                             <img
                                 src={logoImg}
@@ -215,16 +234,6 @@ const LoginForm = ({ handleOnFormChange }) => {
                                     required
                                 />
                             </Form.Group>
-                            {error && (
-                                <div
-                                    style={{
-                                        color: "red",
-                                        marginBottom: "10px",
-                                    }}
-                                >
-                                    {error}
-                                </div>
-                            )}
                             <Form.Group
                                 className="d-flex justify-content-between align-items-center mb-3"
                                 style={{ color: "#fff" }}
@@ -264,6 +273,7 @@ const LoginForm = ({ handleOnFormChange }) => {
                                     Don’t have an account?{" "}
                                     <a
                                         href="/register"
+                                        onClick={handleRegisterClick} // Show loading on Register click
                                         style={{
                                             color: "#FFD000",
                                             textDecoration: "none",
