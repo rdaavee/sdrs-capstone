@@ -1,0 +1,63 @@
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+}
+
+.entry-navbar {
+    height: 80px;
+    padding: 15px;
+}
+
+.brand-logo {
+    width: 50px;
+}
+
+.brand-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.nav-link-custom {
+    margin-right: 15px;
+    color: #FFD000;
+    font-size: 18px;
+    font-family: "Trebuchet MS", sans-serif;
+}
+
+.nav-link-login {
+    font-size: 18px;
+    color: #333;
+    font-family: "Trebuchet MS", sans-serif;
+    margin-right: 30px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .entry-navbar {
+        height: auto;
+        padding: 10px;
+    }
+
+    .brand-title {
+        font-size: 13px;
+    }
+
+    .nav-link-custom,
+    .nav-link-login {
+        font-size: 16px;
+    }
+}

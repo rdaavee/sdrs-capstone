@@ -19,7 +19,6 @@ const Sidebar = ({ children }) => {
     const [showSidebar, setShowSidebar] = useState(false);
     const [showHamburger, setShowHamburger] = useState(true);
 
-    // State for draggable hamburger button
     const [isDragging, setIsDragging] = useState(false);
     const [position, setPosition] = useState({ x: 20, y: 80 });
 
@@ -43,16 +42,13 @@ const Sidebar = ({ children }) => {
         setShowHamburger(true);
     };
 
-    // Draggable hamburger button logic
     const handleMouseDown = (e) => {
         setIsDragging(true);
-        // Calculate the initial offset between the mouse and the button's position
         const offsetX = e.clientX - position.x;
         const offsetY = e.clientY - position.y;
 
         const handleMouseMove = (e) => {
             if (isDragging) {
-                // Update the button's position based on the mouse movement
                 const newX = e.clientX - offsetX;
                 const newY = e.clientY - offsetY;
                 setPosition({ x: newX, y: newY });
@@ -61,18 +57,16 @@ const Sidebar = ({ children }) => {
 
         const handleMouseUp = () => {
             setIsDragging(false);
-            // Remove the event listeners when dragging stops
             window.removeEventListener("mousemove", handleMouseMove);
             window.removeEventListener("mouseup", handleMouseUp);
         };
 
-        // Add event listeners for mouse movement and release
         window.addEventListener("mousemove", handleMouseMove);
         window.addEventListener("mouseup", handleMouseUp);
     };
 
     return (
-        <div className="d-flex" style={{ minHeight: "90vh" }}>
+        <div className="d-flex" style={{ minHeight: "92vh" }}>
             <div
                 className="bg-white p-3 d-none d-md-block sidebar-bg"
                 style={{ width: "270px", minHeight: "80vh" }}
@@ -107,9 +101,9 @@ const Sidebar = ({ children }) => {
                         Dashboard
                     </Nav.Link>
                     <Nav.Link
-                        href="/create-ticket"
+                        href="/add-ticket"
                         className={`mb-3 d-flex align-items-center ${
-                            isActive("/create-ticket")
+                            isActive("/add-ticket")
                                 ? "active-link rounded"
                                 : "text-dark"
                         }`}
@@ -117,7 +111,7 @@ const Sidebar = ({ children }) => {
                     >
                         <img
                             src={
-                                isActive("/create-ticket")
+                                isActive("/add-ticket")
                                     ? createTicketIconLight
                                     : createTicketIconDark
                             }
@@ -129,9 +123,9 @@ const Sidebar = ({ children }) => {
                         Create New Ticket
                     </Nav.Link>
                     <Nav.Link
-                        href="/ticket-status"
+                        href="/tickets"
                         className={`mb-3 d-flex align-items-center ${
-                            isActive("/ticket-status")
+                            isActive("/tickets")
                                 ? "active-link rounded"
                                 : "text-dark"
                         }`}
@@ -139,7 +133,7 @@ const Sidebar = ({ children }) => {
                     >
                         <img
                             src={
-                                isActive("/ticket-status")
+                                isActive("/tickets")
                                     ? ticketStatusIconLight
                                     : ticketStatusIconDark
                             }
@@ -148,7 +142,7 @@ const Sidebar = ({ children }) => {
                             height={20}
                             className="me-2"
                         />
-                        Ticket Status
+                        Ticket Lists
                     </Nav.Link>
                     <Nav.Link
                         onClick={(e) => {
@@ -212,9 +206,9 @@ const Sidebar = ({ children }) => {
                             Dashboard
                         </Nav.Link>
                         <Nav.Link
-                            href="/create-ticket"
+                            href="/add-ticket"
                             className={`mb-3 d-flex align-items-center ${
-                                isActive("/create-ticket")
+                                isActive("/add-ticket")
                                     ? "active-link rounded"
                                     : "text-dark"
                             }`}
@@ -222,7 +216,7 @@ const Sidebar = ({ children }) => {
                         >
                             <img
                                 src={
-                                    isActive("/create-ticket")
+                                    isActive("/add-ticket")
                                         ? createTicketIconLight
                                         : createTicketIconDark
                                 }
@@ -234,9 +228,9 @@ const Sidebar = ({ children }) => {
                             Create New Ticket
                         </Nav.Link>
                         <Nav.Link
-                            href="/ticket-status"
+                            href="/tickets"
                             className={`mb-3 d-flex align-items-center ${
-                                isActive("/ticket-status")
+                                isActive("/tickets")
                                     ? "active-link rounded"
                                     : "text-dark"
                             }`}
@@ -244,7 +238,7 @@ const Sidebar = ({ children }) => {
                         >
                             <img
                                 src={
-                                    isActive("/ticket-status")
+                                    isActive("/tickets")
                                         ? ticketStatusIconLight
                                         : ticketStatusIconDark
                                 }

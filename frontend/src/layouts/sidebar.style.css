@@ -9,6 +9,6 @@
 }
 
 .hamburger-bg {
-    background-color: #ffd000;
-    border: none;
+    background-color: #ffd000 !important;
+    border: none !important;
 }

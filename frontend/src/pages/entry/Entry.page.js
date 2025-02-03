@@ -1,5 +1,5 @@
 import React from "react";
-//import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import EntryHeader from "../../layouts/partials/EntryHeader.comp";
 import Footer from "../../layouts/partials/Footer.comp";
 
@@ -11,6 +11,8 @@ import guidePic3 from "../../assets/images/entry-guide-3.svg";
 import "./Entry.style.css";
 
 const EntryPage = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="bg-gray-100">
             <EntryHeader />
@@ -24,19 +26,10 @@ const EntryPage = () => {
 
             <section
                 id="entry-message"
-                className="py-16 px-8 container mx-auto"
+                className="py-16 px-8 container mx-auto text-center p-5"
             >
-                <br />
-                <br />
-                <h2>
-                    Good News for PHINMA UPang students! <br />
-                    UPang Online Helpdesk is already ready to assist you.
-                </h2>
-                <button className="entry-button mt-5">
-                    Visit UPang Helpdesk
-                </button>
-                <br />
-                <p className="mb-5">
+                <h2>Good News for PHINMA UPang students!</h2>
+                <p>
                     The PHINMA-UPang SDRS in curently going under testing to
                     ready to assist you with all of your online credentials
                     requests. May it be your "Form 137/138, Certificate,
@@ -47,21 +40,24 @@ const EntryPage = () => {
                     ticket, so you know exactly when your request has been
                     completed.
                 </p>
+                <button
+                    className="entry-button mt-5"
+                    onClick={() => navigate("/helpdesk")}
+                >
+                    Visit UPang Helpdesk
+                </button>
             </section>
 
             <section className="guide1-container py-16">
                 <div className="guide1-content">
                     <img
                         src={guidePic1}
-                        alt='Click on "Visit UPang Helpdesk"'
-                        className="guide1-image mb-5"
+                        alt="Click on Visit UPang Helpdesk"
+                        className="guide1-image"
                     />
-                    <div className="guide1-text">
-                        <h4>
-                            1. Start by clicking the Visit UPang Helpdesk
-                            button.
-                        </h4>
-                    </div>
+                    <h4>
+                        1. Start by clicking the Visit UPang Helpdesk button.
+                    </h4>
                 </div>
             </section>
 
@@ -69,15 +65,13 @@ const EntryPage = () => {
                 <div className="guide2-content">
                     <img
                         src={guidePic2}
-                        alt="Login to your PHINMA UPang Account"
-                        className="guide2-image mb-5"
+                        alt="Login to PHINMA UPang Account"
+                        className="guide2-image"
                     />
-                    <div className="guide1-text">
-                        <h4>
-                            2. Login to your PHINMA UPang account to access your
-                            dashboard.
-                        </h4>
-                    </div>
+                    <h4>
+                        2. Log in to your PHINMA UPang account to access your
+                        dashboard.
+                    </h4>
                 </div>
             </section>
 
@@ -85,15 +79,12 @@ const EntryPage = () => {
                 <div className="guide1-content">
                     <img
                         src={guidePic3}
-                        alt='Click on "Create Ticket" and Fill up the form'
-                        className="guide1-image mb-5"
+                        alt="Create Ticket"
+                        className="guide1-image"
                     />
-                    <div className="guide1-text">
-                        <h4>
-                            3. Start by creating a "new support ticket" and
-                            specify your request.
-                        </h4>
-                    </div>
+                    <h4>
+                        3. Create a new support ticket and specify your request.
+                    </h4>
                 </div>
             </section>
 

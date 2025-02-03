@@ -1,9 +1,13 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import sdrsLogo from "../../assets/images/phinma-cservice-logo.png";
 import notificationIcon from "../../assets/icons/notification-bell-icon.svg";
 import { Navbar, Nav } from "react-bootstrap";
+import PageBreadcrumb from "../../components/breadcrumb/Breadcrumb.comp";
 
 const Header = () => {
+    const location = useLocation();
+
     return (
         <Navbar bg="white" variant="white" className="shadow-sm px-3">
             <Navbar.Brand className="d-flex align-items-center">
@@ -18,6 +22,9 @@ const Header = () => {
                     UPang Online Helpdesk
                 </span>
             </Navbar.Brand>
+            <div className="d-none d-md-block">
+                <PageBreadcrumb page={location.pathname} />
+            </div>
             <Nav className="ms-auto d-flex align-items-center">
                 <Nav.Link
                     href="/notifications"

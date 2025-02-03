@@ -1,4 +1,4 @@
-.breadcrumb-style a {
-    text-decoration: none;
-    font-family: "TrebuchetMS, sans-serif";
+.breadcrumb-item a {
+    text-decoration: none !important;
+    color: #ffd000;
 }
