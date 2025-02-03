@@ -1,0 +1,12 @@
+### user login
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+	"email": "dave12@gmail.com",
+	"password": "dave121212"
+}
+
+### get users
+GET http://localhost:5000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OWI4MzFkYmExYjMzYTk0ZDQyNjU2MSIsImVtYWlsIjoiZGF2ZTEyQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzM4NjAwNTYxLCJleHAiOjE3Mzg2ODY5NjF9.H_nZuC9_AuOnGHx1atXcYsQrSgIwUsrXktmkQd6DGkw
