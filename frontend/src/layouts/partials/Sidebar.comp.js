@@ -12,6 +12,7 @@ import ticketStatusIconLight from "../../assets/icons/ticket-status-icon.svg";
 
 import "../../assets/fonts/fonts.css";
 import "../sidebar.style.css";
+import { signOutUser } from "../../utils/firebase";
 
 const Sidebar = ({ children }) => {
     const location = useLocation();
@@ -25,8 +26,9 @@ const Sidebar = ({ children }) => {
 
     const isActive = (path) => location.pathname === path;
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         localStorage.removeItem("token");
+        await signOutUser();
         setShowLogoutModal(false);
         navigate("/login");
     };

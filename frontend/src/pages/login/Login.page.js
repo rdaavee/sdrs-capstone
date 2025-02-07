@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import { signInWithGoogle, signInWithEmail } from "../../utils/firebase";
+import {
+    getAuth,
+    signOut,
+    setPersistence,
+    browserLocalPersistence,
+} from "firebase/auth";
 import LoginForm from "../../components/login/Login.comp";
 import ForgotPasswordForm from "../../components/forgot-password/ForgotPassword.comp";
 
@@ -7,6 +13,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loadLoginScreen, setLoadLoginScreen] = useState("login");
+    const auth = getAuth();
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
@@ -19,6 +26,9 @@ const LoginPage = () => {
         if (!email || !password) return alert("Fill up all the fields!");
 
         try {
+            await signOut(auth);
+            await setPersistence(auth, browserLocalPersistence);
+
             const user = await signInWithEmail(email, password);
             console.log("Logged in:", user);
             alert(`Welcome, ${user.displayName || email}!`);
@@ -29,6 +39,9 @@ const LoginPage = () => {
 
     const handleGoogleLogin = async () => {
         try {
+            await signOut(auth);
+            await setPersistence(auth, browserLocalPersistence);
+
             const user = await signInWithGoogle();
             console.log("Google Login Successful:", user);
             alert(`Welcome, ${user.displayName}!`);

@@ -17,14 +17,18 @@ const Header = () => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user?.photoURL) {
-                setUserPhoto(user.photoURL);
+            if (user) {
+                if (user.photoURL) {
+                    setUserPhoto(user.photoURL);
+                } else {
+                    setUserPhoto(defaultAvatar);
+                }
             } else {
                 setUserPhoto(defaultAvatar);
             }
         });
         return () => unsubscribe();
-    }, []);
+    }, []); 
 
     const handleLogoClick = () => {
         setLoading(true);
