@@ -3,7 +3,7 @@ import { Navbar, Nav, Container, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import upangLogo from "../../assets/images/upang-logo.png";
 import sdrsLogo from "../../assets/images/phinma-cservice-logo.png";
-import '../entryheader.style.css'
+import "../entryheader.style.css";
 
 const EntryHeader = () => {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ const EntryHeader = () => {
                             alt="SDRS Logo"
                             className="brand-logo me-2"
                         />
-                        <span className="brand-title">
+                        <span className="brand-title d-none d-md-block">
                             UPang Online Helpdesk
                         </span>
                     </Navbar.Brand>

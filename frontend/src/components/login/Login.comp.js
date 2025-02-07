@@ -11,11 +11,16 @@ import {
     Toast,
     ToastContainer,
 } from "react-bootstrap";
+
+import { useNavigate } from "react-router-dom";
+import { signInWithGoogle } from "../../utils/firebase";
+
 import logoImg from "../../assets/images/phinma-cservice-logo.png";
 import studentImg from "../../assets/images/login-img.svg";
+import { FcGoogle } from "react-icons/fc";
+
 import "./Login.style.css";
 import "../../assets/fonts/fonts.css";
-import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ handleOnFormChange }) => {
     const navigate = useNavigate();
@@ -44,7 +49,7 @@ const LoginForm = ({ handleOnFormChange }) => {
             const result = await response.json();
 
             if (response.ok) {
-                localStorage.setItem("token", result);
+                localStorage.setItem("token", result.token);
                 setShowToast(true);
 
                 setTimeout(() => {
@@ -77,6 +82,16 @@ const LoginForm = ({ handleOnFormChange }) => {
             setLoading(false);
             navigate("/register");
         }, 1000);
+    };
+
+    const handleGoogleLogin = async () => {
+        try {
+            await signInWithGoogle();
+            navigate("/dashboard");
+        } catch (error) {
+            setError("Google Sign-In failed.");
+            setShowErrorToast(true);
+        }
     };
 
     return (
@@ -268,12 +283,25 @@ const LoginForm = ({ handleOnFormChange }) => {
                             >
                                 Login
                             </Button>
+                            <Button
+                                type="button"
+                                onClick={handleGoogleLogin}
+                                style={{
+                                    backgroundColor: "#3A4F24",
+                                    width: "100%",
+                                    marginTop: "10px",
+                                    padding: "10px",
+                                    border: "none",
+                                }}
+                            >
+                                <FcGoogle size={25} /> Login with Google
+                            </Button>
                             <div className="mt-3">
                                 <p style={{ color: "#fff" }}>
                                     Don’t have an account?{" "}
                                     <a
                                         href="/register"
-                                        onClick={handleRegisterClick} // Show loading on Register click
+                                        onClick={handleRegisterClick}
                                         style={{
                                             color: "#FFD000",
                                             textDecoration: "none",

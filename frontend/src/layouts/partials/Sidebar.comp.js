@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Nav, Offcanvas, Button } from "react-bootstrap";
+import { Nav, Offcanvas, Button, Modal } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import dashboardIconDark from "../../assets/icons/dashboard-icon-dark.svg";
@@ -18,6 +18,7 @@ const Sidebar = ({ children }) => {
     const navigate = useNavigate();
     const [showSidebar, setShowSidebar] = useState(false);
     const [showHamburger, setShowHamburger] = useState(true);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const [isDragging, setIsDragging] = useState(false);
     const [position, setPosition] = useState({ x: 20, y: 80 });
@@ -26,6 +27,7 @@ const Sidebar = ({ children }) => {
 
     const handleLogout = () => {
         localStorage.removeItem("token");
+        setShowLogoutModal(false);
         navigate("/login");
     };
 
@@ -147,15 +149,36 @@ const Sidebar = ({ children }) => {
                     <Nav.Link
                         onClick={(e) => {
                             e.preventDefault();
-                            handleLogout();
+                            setShowLogoutModal(true);
                         }}
                         className="d-flex align-items-center text-dark mt-auto"
                         style={{ padding: "10px" }}
                     >
-                        Logout
+                        Log out
                     </Nav.Link>
                 </Nav>
             </div>
+
+            <Modal
+                show={showLogoutModal}
+                onHide={() => setShowLogoutModal(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Logout</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to log out?</Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setShowLogoutModal(false)}
+                    >
+                        No
+                    </Button>
+                    <Button variant="danger" onClick={handleLogout}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
             <Offcanvas
                 show={showSidebar}
@@ -252,12 +275,12 @@ const Sidebar = ({ children }) => {
                         <Nav.Link
                             onClick={(e) => {
                                 e.preventDefault();
-                                handleLogout();
+                                setShowLogoutModal(true);
                             }}
                             className="d-flex align-items-center text-dark mt-auto"
                             style={{ padding: "10px" }}
                         >
-                            Logout
+                            Log out
                         </Nav.Link>
                     </Nav>
                 </Offcanvas.Body>
