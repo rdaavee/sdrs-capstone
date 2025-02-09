@@ -10,6 +10,7 @@ import RegistrationForm from "./components/registration/Registration.comp";
 import LoginPage from "./pages/login/Login.page";
 import EntryPage from "./pages/entry/Entry.page";
 import { AuthProvider } from "./utils/authContext";
+import ConfirmRequest from "./pages/request/ConfirmRequest.page";
 
 function App() {
     return (
@@ -22,6 +23,11 @@ function App() {
                         <Route
                             path="/register"
                             element={<RegistrationForm />}
+                        />
+
+                        <Route
+                            path="/confirm-request"
+                            element={<ConfirmRequest />}
                         />
 
                         <Route element={<DefaultLayout />}>
