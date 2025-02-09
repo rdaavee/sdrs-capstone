@@ -446,11 +446,19 @@ const EntryPage = () => {
                                             <option value="">
                                                 Select Province
                                             </option>
-                                            {provinces.map((province) => (
-                                                <option key={province.id}>
-                                                    {province.name}
-                                                </option>
-                                            ))}
+                                            {provinces
+                                                .slice()
+                                                .sort((a, b) =>
+                                                    a.name.localeCompare(b.name)
+                                                )
+                                                .map((province) => (
+                                                    <option
+                                                        key={province.id}
+                                                        value={province.name}
+                                                    >
+                                                        {province.name}
+                                                    </option>
+                                                ))}
                                         </select>
                                     </div>
 
