@@ -1,0 +1,27 @@
+.sign-in-btn {
+    background-color: #ffd000;
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+    color: #ffffff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.sign-in-btn:hover {
+    background-color: #cfaa06;
+}
+
+.sign-in-btn-google {
+    background-color: #31421e;
+    width: 100%;
+    border-radius: 5px;
+    padding: 10px;
+    color: #ffffff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.sign-in-btn-google:hover {
+    background-color: #273319;
+}

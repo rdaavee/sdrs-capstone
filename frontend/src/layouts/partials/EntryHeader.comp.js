@@ -52,13 +52,10 @@ const EntryHeader = () => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto d-flex align-items-center">
-                            <Nav.Link href="/" className="nav-link-custom">
-                                Home
-                            </Nav.Link>
                             <Nav.Link
                                 href="/login"
                                 onClick={handleLoginClick}
-                                className="nav-link-login"
+                                className="nav-link-login nav-link-custom"
                             >
                                 Login
                             </Nav.Link>

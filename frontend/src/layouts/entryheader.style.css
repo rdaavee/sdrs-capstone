@@ -33,17 +33,16 @@
 
 .nav-link-custom {
     margin-right: 15px;
-    color: #FFD000;
+    color: black;
     font-size: 18px;
     font-family: "Trebuchet MS", sans-serif;
 }
 
-.nav-link-login {
+.nav-link-custom:hover {
+    margin-right: 15px;
+    color: #ffd000;
     font-size: 18px;
-    color: #333;
     font-family: "Trebuchet MS", sans-serif;
-    margin-right: 30px;
-    cursor: pointer;
 }
 
 @media (max-width: 768px) {

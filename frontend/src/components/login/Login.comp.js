@@ -53,7 +53,7 @@ const LoginForm = ({ handleOnFormChange }) => {
                 setShowToast(true);
 
                 setTimeout(() => {
-                    navigate("/dashboard");
+                    navigate("/");
                 }, 1500);
             } else {
                 setError(result.message || "Login failed");
@@ -87,7 +87,7 @@ const LoginForm = ({ handleOnFormChange }) => {
     const handleGoogleLogin = async () => {
         try {
             await signInWithGoogle();
-            navigate("/dashboard");
+            navigate("/");
         } catch (error) {
             setError("Google Sign-In failed.");
             setShowErrorToast(true);
@@ -269,32 +269,28 @@ const LoginForm = ({ handleOnFormChange }) => {
                                 </a>
                             </Form.Group>
                             <Button
-                                variant="warning"
+                                className="sign-in-btn"
                                 type="submit"
-                                style={{
-                                    backgroundColor: "#FFD000",
-                                    width: "100%",
-                                    borderRadius: "5px",
-                                    padding: "10px",
-                                    fontWeight: "bold",
-                                    color: "#ffffff",
-                                }}
                                 disabled={loading}
                             >
-                                Login
+                                Sign in
                             </Button>
-                            <Button
-                                type="button"
-                                onClick={handleGoogleLogin}
+                            <p
                                 style={{
-                                    backgroundColor: "#3A4F24",
-                                    width: "100%",
-                                    marginTop: "10px",
-                                    padding: "10px",
-                                    border: "none",
+                                    color: "white",
+                                    fontSize: "17px",
+                                    marginTop: "15px",
+                                    textAlign: "center",
                                 }}
                             >
-                                <FcGoogle size={25} /> Login with Google
+                                OR
+                            </p>
+                            <Button
+                                className="sign-in-btn-google"
+                                type="button"
+                                onClick={handleGoogleLogin}
+                            >
+                                <FcGoogle size={25} /> Sign in with Google
                             </Button>
                             <div className="mt-3">
                                 <p style={{ color: "#fff" }}>
