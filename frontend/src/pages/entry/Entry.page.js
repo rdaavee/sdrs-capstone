@@ -2,64 +2,32 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ToastContainer, Toast, Nav, Dropdown } from "react-bootstrap";
-import { auth } from "../../utils/firebase";
-import defaultAvatar from "../../assets/images/default-avatar.png";
-import { signOutUser } from "../../utils/firebase";
+
+import useLocationData from "../../hooks/useLocationData";
+import useAuth from "../../hooks/useAuth";
+import useOfficeHours from "../../hooks/useOfficeHours";
 
 import "./Entry.style.css";
 
 const EntryPage = () => {
     const [activeTab, setActiveTab] = useState("newRequest");
-    const [isOpen, setIsOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [showWarningToast, setShowWarningToast] = useState(false);
-    const [userPhoto, setUserPhoto] = useState(defaultAvatar);
-    const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const [provinces, setProvinces] = useState([]);
-    const [cities, setMunicipalities] = useState([]);
-    const [barangays, setBarangays] = useState([]);
-    const [selectedProvince, setSelectedProvince] = useState("");
-    const [selectedMunicipality, setSelectedMunicipality] = useState("");
+    const {
+        provinces,
+        municipalities,
+        barangays,
+        handleProvinceChange,
+        handleMunicipalityChange,
+    } = useLocationData();
+
+    const { isLoggedIn, userPhoto, handleLogout } = useAuth();
+    const { isOpen } = useOfficeHours();
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetch("https://psgc.cloud/api/provinces")
-            .then((res) => res.json())
-            .then((data) => setProvinces(data))
-            .catch((error) =>
-                console.error("Error fetching provinces:", error)
-            );
-    }, []);
-
-    const handleProvinceChange = (e) => {
-        const provinceCode = e.target.value;
-        setSelectedProvince(provinceCode);
-        setMunicipalities([]);
-        setBarangays([]);
-
-        fetch(
-            `https://psgc.cloud/api/provinces/${provinceCode}/cities-municipalities`
-        )
-            .then((response) => response.json())
-            .then((data) => setMunicipalities(data));
-    };
-
-    const handleMunicipalityChange = (e) => {
-        const municipalityCode = e.target.value;
-        setSelectedMunicipality(municipalityCode);
-        setBarangays([]);
-
-        fetch(
-            `https://psgc.cloud/api/municipalities/${municipalityCode}/barangays`
-        )
-            .then((response) => response.json())
-            .then((data) => setBarangays(data));
-    };
 
     const handleLoginButton = (e) => {
         e.preventDefault();
@@ -71,72 +39,12 @@ const EntryPage = () => {
         }, 1500);
     };
 
-    const handleLogout = async () => {
-        localStorage.removeItem("token");
-        await signOutUser();
-        setShowLogoutModal(false);
-        navigate("/");
-    };
-
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
         }, 800);
 
         return () => clearTimeout(timer);
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                setIsLoggedIn(true);
-                setUserPhoto(user.photoURL || defaultAvatar);
-            } else {
-                setIsLoggedIn(false);
-                setUserPhoto(defaultAvatar);
-            }
-        });
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        const checkOfficeHours = async () => {
-            try {
-                const response = await fetch(
-                    "https://timeapi.io/api/Time/current/zone?timeZone=Asia/Manila"
-                );
-                const data = await response.json();
-
-                const day = data.dayOfWeek;
-                const hours = data.hour;
-                const minutes = data.minute;
-
-                const isWeekday = [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Sunday",
-                ].includes(day);
-
-                const isWorkingHours =
-                    (hours > 8 && hours < 17) ||
-                    (hours === 8 && minutes >= 0) ||
-                    (hours === 17 && minutes === 0) ||
-                    hours === 0 ||
-                    (hours === 2 && minutes <= 60); //for testing
-
-                setIsOpen(isWeekday && isWorkingHours);
-            } catch (error) {
-                console.error("Error fetching time:", error);
-            }
-        };
-
-        checkOfficeHours();
-        const interval = setInterval(checkOfficeHours, 60000);
-
-        return () => clearInterval(interval);
     }, []);
 
     if (loading) {
@@ -458,19 +366,23 @@ const EntryPage = () => {
                                         <select
                                             id="city"
                                             onChange={handleMunicipalityChange}
-                                            disabled={!selectedProvince}
+                                            disabled={!handleProvinceChange}
                                         >
                                             <option value="">
                                                 Select Municipality/City
                                             </option>
-                                            {cities.map((municipality) => (
-                                                <option
-                                                    key={municipality.id}
-                                                    value={municipality.name}
-                                                >
-                                                    {municipality.name}
-                                                </option>
-                                            ))}
+                                            {municipalities.map(
+                                                (municipality) => (
+                                                    <option
+                                                        key={municipality.id}
+                                                        value={
+                                                            municipality.name
+                                                        }
+                                                    >
+                                                        {municipality.name}
+                                                    </option>
+                                                )
+                                            )}
                                         </select>
                                     </div>
 
@@ -480,11 +392,10 @@ const EntryPage = () => {
                                         </label>
                                         <select
                                             id="city"
-                                            onChange={handleMunicipalityChange}
-                                            disabled={!selectedProvince}
+                                            disabled={!handleMunicipalityChange}
                                         >
                                             <option value="">
-                                                Select Municipality/City
+                                                Select Barangay
                                             </option>
                                             {barangays.map((barangay) => (
                                                 <option
