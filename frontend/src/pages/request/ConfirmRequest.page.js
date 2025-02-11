@@ -12,7 +12,7 @@ import useSubmitRequest from "../../hooks/useSubmitRequest";
 
 const ConfirmRequest = () => {
     const location = useLocation();
-    const { referenceNumber, ...formData } = location.state || {};
+    const { ...formData } = location.state || {};
 
     const {
         handleSubmit,
@@ -78,7 +78,7 @@ const ConfirmRequest = () => {
                             <h4>Personal Information</h4>
                             <div className="info-item">
                                 <strong>Reference Number</strong>
-                                <span>{referenceNumber}</span>
+                                <span>{formData.referenceNumber}</span>
                             </div>
                             <div className="info-item">
                                 <strong>Name</strong>

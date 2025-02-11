@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ToastContainer, Toast, Nav, Dropdown } from "react-bootstrap";
+import { ToastContainer, Toast, Nav, Dropdown, Col } from "react-bootstrap";
 import { AiOutlineFileAdd } from "react-icons/ai";
 
 import useLocationData from "../../hooks/useLocationData";
 import useAuth from "../../hooks/useAuth";
 import useOfficeHours from "../../hooks/useOfficeHours";
 
+import upangLogo from "../../assets/images/upang-logo.png";
+
 import "./Entry.style.css";
 
 const EntryPage = () => {
     const [activeTab, setActiveTab] = useState("newRequest");
     const [loading, setLoading] = useState(true);
+    const [sendRequest, setRequest] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showWarningToast, setShowWarningToast] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
@@ -33,17 +36,19 @@ const EntryPage = () => {
     };
 
     const [formData, setFormData] = useState({
-        studentId: "",
+        referenceNumber: "",
+        studentNumber: "",
         firstName: "",
         middleName: "",
         lastName: "",
         email: "",
-        contactNumber: "",
+        mobileNumber: "",
         course: "",
         yearGraduated: "",
         province: "",
         municipality: "",
         barangay: "",
+        sampleDocument: "",
     });
 
     const handleChange = (e) => {
@@ -63,15 +68,34 @@ const EntryPage = () => {
         handleBarangayChange,
     } = useLocationData(setFormData);
 
+    const generateReferenceNumber = () => {
+        const timestamp = Date.now().toString().slice(-6);
+        const randomPart = Math.random()
+            .toString(36)
+            .substring(2, 8)
+            .toUpperCase();
+        return `REF${timestamp}SDRS${randomPart}`;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        console.log(formData);
-        setTimeout(() => {
+
+        const refNumber = generateReferenceNumber();
+
+        setFormData((prev) => ({
+            ...prev,
+            referenceNumber: refNumber,
+        }));
+        setRequest((prev) => !prev);
+    };
+
+    useEffect(() => {
+        if (sendRequest) {
             setLoading(false);
             navigate("/confirm-request", { state: formData });
-        }, 1500);
-    };
+        }
+    }, [sendRequest]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -108,8 +132,31 @@ const EntryPage = () => {
                 </Toast>
             </ToastContainer>
 
-            <div className="header d-flex flex-column text-white text-center">
-                <div className="d-flex justify-content-end w-100 p-3">
+            <div
+                className="d-flex flex-column text-white text-center"
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    position: "relative",
+                    height: "300px",
+                    backgroundImage:
+                        'linear-gradient(to bottom, rgba(113, 184, 40, 0.3), rgba(0, 0, 0, 1) 100%), url("../../assets/images/bg.jpg")',
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    color: "white",
+                }}
+            >
+                <div className="d-flex justify-content-between w-100 mb-5">
+                    <img
+                        src={upangLogo}
+                        className="px-5 my-auto"
+                        alt=""
+                        height={65}
+                    />
                     {!isLoggedIn ? (
                         <button
                             onClick={handleLoginButton}
@@ -125,31 +172,23 @@ const EntryPage = () => {
                             <Dropdown show={showDropdown}>
                                 <Dropdown.Toggle
                                     as="div"
-                                    className="d-flex align-items-center"
+                                    className="px-5 my-auto"
                                 >
                                     <img
                                         src={userPhoto}
                                         alt="User Avatar"
                                         width={55}
                                         height={55}
-                                        className="rounded-circle"
+                                        className="rounded-circle align-items-center justify-content-center my-auto"
                                         style={{
                                             objectFit: "cover",
                                             border: "2px solid #ddd",
-                                            marginRight: "10px",
                                             cursor: "pointer",
+                                            marginRight: "10px",
                                         }}
                                     />
                                 </Dropdown.Toggle>
-
                                 <Dropdown.Menu>
-                                    {/* <Dropdown.Item href="/profile">
-                                        Profile
-                                    </Dropdown.Item>
-                                    <Dropdown.Item href="/settings">
-                                        Settings
-                                    </Dropdown.Item>
-                                    <Dropdown.Divider /> */}
                                     <Dropdown.Item onClick={handleLogout}>
                                         Logout
                                     </Dropdown.Item>
@@ -158,15 +197,15 @@ const EntryPage = () => {
                         </Nav>
                     )}
                 </div>
-
-                <h1 className="location fw-bold">
-                    University of Pangasinan <br />
-                    <span>Dagupan Campus</span>
-                </h1>
-                <h2 className="fw-light">Online Document Request System</h2>
+                <div className="mb-5">
+                    <h1 className="location fw-bold">
+                        PHINMA - University of Pangasinan <br />
+                    </h1>
+                    <p>Student Document Request System</p>
+                </div>
             </div>
 
-            <div className="tabs gap-3 d-flex align-items-center">
+            <div className="tabs gap-3 d-flex align-items-center mt-5">
                 {[
                     { id: "newRequest", label: "New Request" },
                     { id: "requestTracker", label: "Request Tracker" },
@@ -225,7 +264,7 @@ const EntryPage = () => {
                         className="new-request"
                     >
                         <div className={`status ${isOpen ? "open" : "closed"}`}>
-                            {isOpen ? "Welcome!" : "CLOSED"}
+                            {isOpen ? "We're ready to serve you" : "CLOSED"}
                         </div>
                         <div className="office-hours">
                             <h2>Office Hours</h2>
@@ -299,6 +338,8 @@ const EntryPage = () => {
                 )}
             </div>
 
+            {/* <Footer /> */}
+
             {/* MODAL */}
             {showModal && (
                 <div
@@ -320,17 +361,16 @@ const EntryPage = () => {
                         </h5>
                         <hr />
                         <div className="form-container">
-                            <h3
-                                style={{
-                                    marginBottom: "30px",
-                                    fontWeight: "bold",
-                                    color: "white",
-                                }}
-                            >
-                                Personal Information
-                            </h3>
-
-                            <div className="form-group">
+                            <div className="form-group border p-3">
+                                <h3
+                                    style={{
+                                        marginBottom: "30px",
+                                        fontWeight: "bold",
+                                        color: "white",
+                                    }}
+                                >
+                                    Personal Information
+                                </h3>
                                 <div className="form-row">
                                     <div className="form-field">
                                         <label htmlFor="student-id">
@@ -340,8 +380,8 @@ const EntryPage = () => {
                                             pattern="[0-9]*"
                                             type="text"
                                             maxLength={15}
-                                            id="studentId"
-                                            value={formData.studentId}
+                                            id="studentNumber"
+                                            value={formData.studentNumber}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -402,8 +442,8 @@ const EntryPage = () => {
                                         </label>
                                         <input
                                             type="number"
-                                            id="contactNumber"
-                                            value={formData.contactNumber}
+                                            id="mobileNumber"
+                                            value={formData.mobileNumber}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -514,7 +554,83 @@ const EntryPage = () => {
                                 </div>
                             </div>
 
-                            <hr className="mt-4" />
+                            <div className="row mt-5">
+                                <Col>
+                                    <div className="border p-3">
+                                        <h3
+                                            style={{
+                                                marginBottom: "30px",
+                                                fontWeight: "bold",
+                                                color: "white",
+                                                textAlign: "start",
+                                            }}
+                                        >
+                                            Request for Records
+                                        </h3>
+                                        <div className="form-field">
+                                            <label htmlFor="sampleDocument">
+                                                Transcipt Type <span>*</span>
+                                            </label>
+                                            <select
+                                                id="sampleDocument"
+                                                value={formData.sampleDocument}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="">
+                                                    Select Document
+                                                </option>
+                                                <option value="Transcript">
+                                                    Transcript
+                                                </option>
+                                                <option value="Certificate">
+                                                    Certificate
+                                                </option>
+                                                <option value="Other">
+                                                    Other
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div className="border p-3">
+                                        <h3
+                                            style={{
+                                                marginBottom: "30px",
+                                                fontWeight: "bold",
+                                                color: "white",
+                                                textAlign: "start",
+                                            }}
+                                        >
+                                            Request for Certification
+                                        </h3>
+                                        <div className="form-field">
+                                            <label htmlFor="sampleDocument">
+                                                Document Type <span>*</span>
+                                            </label>
+                                            <select
+                                                id="sampleDocument"
+                                                value={formData.sampleDocument}
+                                                onChange={handleChange}
+                                            >
+                                                <option value="">
+                                                    Select Document
+                                                </option>
+                                                <option value="Transcript">
+                                                    Transcript
+                                                </option>
+                                                <option value="Certificate">
+                                                    Certificate
+                                                </option>
+                                                <option value="Other">
+                                                    Other
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </Col>
+                            </div>
+
                             <button
                                 className="submit-button"
                                 onClick={handleSubmit}

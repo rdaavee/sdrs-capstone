@@ -2,6 +2,7 @@ const Request = require("../models/requestModel");
 
 async function createRequest(requestData) {
     const {
+        referenceNumber,
         studentNumber,
         firstName,
         middleName,
@@ -13,9 +14,11 @@ async function createRequest(requestData) {
         province,
         municipality,
         barangay,
+        sampleDocument,
     } = requestData;
 
     const createdRequest = new Request({
+        referenceNumber,
         studentNumber,
         firstName,
         middleName,
@@ -27,6 +30,7 @@ async function createRequest(requestData) {
         province,
         municipality,
         barangay,
+        sampleDocument,
     });
 
     const savedRequest = await createdRequest.save();
