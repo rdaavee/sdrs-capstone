@@ -1,21 +1,29 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { Col, Container, Row, Button } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import {
+    Col,
+    Container,
+    Row,
+    Button,
+    ToastContainer,
+    Toast,
+} from "react-bootstrap";
 import "./ConfirmRequest.style.css";
+import useSubmitRequest from "../../hooks/useSubmitRequest";
 
 const ConfirmRequest = () => {
     const location = useLocation();
-    const navigate = useNavigate();
-    const formData = location.state || {};
+    const { referenceNumber, ...formData } = location.state || {};
 
-    console.log("Received Form Data:", formData);
-
-    const handleCancel = () => {
-        navigate("/");
-    };
-
-    const handleSubmit = () => {
-        alert("Request submitted successfully!");
-    };
+    const {
+        handleSubmit,
+        handleCancel,
+        loading,
+        error,
+        showToast,
+        showErrorToast,
+        setShowToast,
+        setShowErrorToast,
+    } = useSubmitRequest(formData);
 
     return (
         <div style={{ color: "white", padding: "20px" }}>
@@ -28,6 +36,41 @@ const ConfirmRequest = () => {
                 </span>
             </p>
             <hr />
+
+            <ToastContainer position="top-end" className="p-3">
+                <Toast
+                    bg="success"
+                    show={showToast}
+                    onClose={() => setShowToast(false)}
+                    delay={2000}
+                    autohide
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">UPang Toast</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">
+                        Request Submitted Successfully
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
+
+            <ToastContainer position="top-end" className="p-3">
+                <Toast
+                    bg="danger"
+                    show={showErrorToast}
+                    onClose={() => setShowErrorToast(false)}
+                    delay={3000}
+                    autohide
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">Error</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">
+                        {error || "Invalid Format"}
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
+
             <Container>
                 <Row>
                     <Col md={6}>
@@ -35,6 +78,7 @@ const ConfirmRequest = () => {
                             <h4>Personal Information</h4>
                             <div className="info-item">
                                 <strong>Reference Number</strong>
+                                <span>{referenceNumber}</span>
                             </div>
                             <div className="info-item">
                                 <strong>Name</strong>
@@ -49,11 +93,11 @@ const ConfirmRequest = () => {
                             </div>
                             <div className="info-item">
                                 <strong>Student Number</strong>
-                                <span>{formData.studentId}</span>
+                                <span>{formData.studentNumber}</span>
                             </div>
                             <div className="info-item">
                                 <strong>Contact Number</strong>
-                                <span>{formData.contactNumber}</span>
+                                <span>{formData.mobileNumber}</span>
                             </div>
                             <div className="info-item">
                                 <strong>Course</strong>
@@ -76,8 +120,8 @@ const ConfirmRequest = () => {
                         <div className="info-box">
                             <h4>Requested Documents</h4>
                             <div className="info-item">
-                                <strong>Sample Document</strong>
-                                <span>{"N/A"}</span>
+                                <strong>Document</strong>
+                                <span>{formData.sampleDocument}</span>
                             </div>
                         </div>
                     </Col>
@@ -86,8 +130,12 @@ const ConfirmRequest = () => {
                     <Button variant="light" onClick={handleCancel}>
                         Cancel
                     </Button>
-                    <Button className="submit-request" onClick={handleSubmit}>
-                        Submit Request
+                    <Button
+                        className="submit-request"
+                        onClick={handleSubmit}
+                        disabled={loading}
+                    >
+                        {loading ? "Submitting..." : "Submit Request"}
                     </Button>
                 </div>
             </Container>

@@ -24,8 +24,8 @@ const useOfficeHours = () => {
                     "Sunday",
                 ].includes(day);
                 const isWorkingHours =
-                    (hours > 8 && hours < 24) ||
-                    (hours === 8 && minutes >= 0) ||
+                    (hours > 0 && hours < 24) ||
+                    (hours === 0 && minutes >= 0) ||
                     (hours === 23 && minutes === 59);
 
                 setIsOpen(isWeekday && isWorkingHours);
