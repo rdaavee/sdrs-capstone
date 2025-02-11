@@ -4,6 +4,7 @@ const cors = require("cors");
 const authRoute = require("./routes/authRoutes");
 const userRoute = require("./routes/userRoute");
 const requestRoute = require("./routes/requestRoute");
+const trackerRoute = require("./routes/trackerRoute");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/auth", authRoute);
 app.use("/api", userRoute);
 
 app.use("/request", requestRoute);
+app.use("/tracker", trackerRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on https://localhost:${PORT}`);

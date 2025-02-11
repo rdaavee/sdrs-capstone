@@ -2,7 +2,6 @@ import "./App.css";
 import DefaultLayout from "./layouts/DefaultLayout";
 import Ticket from "./pages/ticket-list/Ticket";
 import AddTicket from "./pages/new-ticket/AddTicket.page";
-import Dashboard from "./pages/dashboard/Dashboard.page";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/private-route/PrivateRoute.comp";
 import TicketListScreen from "./pages/ticket-list/TicketList.page";
@@ -11,6 +10,8 @@ import LoginPage from "./pages/login/Login.page";
 import EntryPage from "./pages/entry/Entry.page";
 import { AuthProvider } from "./utils/authContext";
 import ConfirmRequest from "./pages/request/ConfirmRequest.page";
+import AdminDashboard from "./pages/admin/AdminDashboard.page";
+import TrackerRequest from "./pages/tracker/TrackerRequest.page";
 
 function App() {
     return (
@@ -24,6 +25,10 @@ function App() {
                             path="/register"
                             element={<RegistrationForm />}
                         />
+                        <Route
+                            path="/tracker-request"
+                            element={<TrackerRequest />}
+                        />
 
                         <Route
                             path="/confirm-request"
@@ -32,12 +37,8 @@ function App() {
 
                         <Route element={<DefaultLayout />}>
                             <Route
-                                path="/dashboard"
-                                element={
-                                    <PrivateRoute>
-                                        <Dashboard />
-                                    </PrivateRoute>
-                                }
+                                path="/admin-dashboard"
+                                element={<AdminDashboard />}
                             />
                             <Route
                                 path="/add-ticket"

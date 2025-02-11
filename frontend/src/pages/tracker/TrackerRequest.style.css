@@ -1,0 +1,60 @@
+.tracker-container {
+    padding: 40px 0;
+}
+
+.timeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.timeline-step {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #d3d3d3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+    position: relative;
+}
+
+.circle.completed {
+    background-color: #28a745;
+}
+
+.connector {
+    height: 8px;
+    width: 100px;
+    background-color: #d3d3d3;
+    margin-left: -4px;
+    margin-right: -4px;
+}
+
+.connector.completed {
+    background-color: #28a745;
+}
+
+.step-label {
+    text-align: center;
+    font-size: 12px;
+}
+
+.info-section {
+    border-left: 3px solid #d3d3d3;
+    padding-left: 20px;
+}
+
+.info-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}

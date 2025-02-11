@@ -113,6 +113,23 @@ const EntryPage = () => {
         );
     }
 
+    const handleTrackerRequest = async () => {
+        try {
+            const response = await fetch(
+                `http://localhost:5000/tracker/${formData.referenceNumber}`
+            );
+            if (response.ok) {
+                const data = await response.json();
+                navigate("/tracker-request", { state: data });
+            } else {
+                alert("Request not found or invalid reference number.");
+            }
+        } catch (error) {
+            console.error("Error fetching request:", error);
+            alert("Failed to fetch request data.");
+        }
+    };
+
     return (
         <div className="document-request-container">
             <ToastContainer position="top-end" className="p-3">
@@ -325,13 +342,27 @@ const EntryPage = () => {
                                     type="text"
                                     placeholder="Reference Number"
                                     className="input"
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            referenceNumber: e.target.value,
+                                        })
+                                    }
                                 />
                                 <input
                                     type="text"
                                     placeholder="4-digit PIN"
                                     className="input"
+                                    // onChange={(e) =>
+                                    //     setReferenceNumber(e.target.value)
+                                    // }
                                 />
-                                <button className="track-button">Track</button>
+                                <button
+                                    className="track-button"
+                                    onClick={handleTrackerRequest}
+                                >
+                                    Track
+                                </button>
                             </div>
                         </div>
                     </motion.div>
