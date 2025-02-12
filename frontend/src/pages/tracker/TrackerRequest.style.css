@@ -1,22 +1,32 @@
 .tracker-container {
-    padding: 40px 0;
+    border-radius: 2px;
 }
 
 .timeline {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.steps-container {
+    display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+    position: relative;
 }
 
 .timeline-step {
     display: flex;
+    flex-direction: column;
     align-items: center;
     position: relative;
 }
 
 .circle {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background-color: #d3d3d3;
     display: flex;
@@ -25,36 +35,79 @@
     font-size: 14px;
     color: white;
     font-weight: bold;
-    position: relative;
+    z-index: 1;
 }
 
 .circle.completed {
     background-color: #28a745;
 }
 
-.connector {
-    height: 8px;
-    width: 100px;
-    background-color: #d3d3d3;
-    margin-left: -4px;
-    margin-right: -4px;
-}
-
-.connector.completed {
-    background-color: #28a745;
-}
-
 .step-label {
+    margin-top: 8px;
+    font-size: 13px;
     text-align: center;
-    font-size: 12px;
 }
 
-.info-section {
-    border-left: 3px solid #d3d3d3;
-    padding-left: 20px;
+.timeline-line {
+    width: 250px;
+    height: 4px;
+    background-color: #d3d3d3;
+    border: none;
+    position: relative;
+    z-index: 0;
+    bottom: 10px;
+    right: 10px;
 }
 
 .info-title {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.info-details p {
+    color: #000;
     font-weight: bold;
-    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.info-details strong {
+    color: #989898;
+    font-weight: lighter;
+    white-space: nowrap;
+}
+
+.info-details p span {
+    text-align: right;
+    flex: 1;
+    margin-left: 10px;
+    font-style: italic;
+}
+
+.info-section {
+    border-left: 1px solid #d3d3d3;
+}
+
+@media (max-width: 768px) {
+    .circle {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+    }
+
+    .timeline-line {
+        width: 80px;
+        height: 3px;
+    }
+
+    .step-label {
+        font-size: 12px;
+    }
+
+    .info-section {
+        border-top: 1px solid #d3d3d3;
+        border-left: none;
+    }
 }

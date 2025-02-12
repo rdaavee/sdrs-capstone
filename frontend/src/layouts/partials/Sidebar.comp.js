@@ -83,9 +83,9 @@ const Sidebar = ({ children }) => {
                     }}
                 >
                     <Nav.Link
-                        href="/dashboard"
+                        href="/admin-dashboard"
                         className={`mb-3 d-flex align-items-center ${
-                            isActive("/dashboard")
+                            isActive("/admin-dashboard")
                                 ? "active-link rounded"
                                 : "text-dark"
                         }`}
@@ -93,7 +93,7 @@ const Sidebar = ({ children }) => {
                     >
                         <img
                             src={
-                                isActive("/dashboard")
+                                isActive("/admin-dashboard")
                                     ? dashboardIconLight
                                     : dashboardIconDark
                             }
@@ -104,7 +104,7 @@ const Sidebar = ({ children }) => {
                         />
                         Dashboard
                     </Nav.Link>
-                    <Nav.Link
+                    {/* <Nav.Link
                         href="/add-ticket"
                         className={`mb-3 d-flex align-items-center ${
                             isActive("/add-ticket")
@@ -147,7 +147,7 @@ const Sidebar = ({ children }) => {
                             className="me-2"
                         />
                         Ticket Lists
-                    </Nav.Link>
+                    </Nav.Link> */}
                     <Nav.Link
                         onClick={(e) => {
                             e.preventDefault();
@@ -196,7 +196,7 @@ const Sidebar = ({ children }) => {
                             fontWeight: "bold",
                         }}
                     >
-                        UPang Online Helpdesk
+                        UPang Admin Dashboard
                     </Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
@@ -209,9 +209,9 @@ const Sidebar = ({ children }) => {
                         }}
                     >
                         <Nav.Link
-                            href="/dashboard"
+                            href="/admin-dashboard"
                             className={`mb-3 d-flex align-items-center ${
-                                isActive("/dashboard")
+                                isActive("/admin-dashboard")
                                     ? "active-link rounded"
                                     : "text-dark"
                             }`}
@@ -219,7 +219,7 @@ const Sidebar = ({ children }) => {
                         >
                             <img
                                 src={
-                                    isActive("/dashboard")
+                                    isActive("/admin-dashboard")
                                         ? dashboardIconLight
                                         : dashboardIconDark
                                 }
@@ -230,7 +230,7 @@ const Sidebar = ({ children }) => {
                             />
                             Dashboard
                         </Nav.Link>
-                        <Nav.Link
+                        {/* <Nav.Link
                             href="/add-ticket"
                             className={`mb-3 d-flex align-items-center ${
                                 isActive("/add-ticket")
@@ -273,7 +273,7 @@ const Sidebar = ({ children }) => {
                                 className="me-2"
                             />
                             Ticket Status
-                        </Nav.Link>
+                        </Nav.Link> */}
                         <Nav.Link
                             onClick={(e) => {
                                 e.preventDefault();

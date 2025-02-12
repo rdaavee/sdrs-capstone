@@ -1,30 +1,33 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
 import TicketForm from "../../components/add-ticket-form/AddTicketForm.comp";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { shortText } from "../../utils/validation";
-import PageBreadcrumb from "../../components/breadcrumb/Breadcrumb.comp";
+import Sidebar from "../../layouts/partials/Sidebar.comp";
 
 const initialFormData = {
-    subject: "",
-    issueDate: "",
-    detail: "",
+    requester: "",
+    contactNumber: "",
+    programCourse: "",
+    description: "",
+    areaOfConcern: "",
+    studentNumber: "",
 };
 
 const initialFormError = {
-    subject: false,
-    issueDate: false,
-    detail: false,
+    requester: false,
+    contactNumber: false,
+    programCourse: false,
+    description: false,
+    areaOfConcern: false,
+    studentNumber: false,
 };
 
 const AddTicket = () => {
     const [formData, setFormData] = useState(initialFormData);
     const [formDataError, setFormDataError] = useState(initialFormError);
-    useEffect(() => {}, [formData, formDataError]);
 
     const handleOnChange = (e) => {
         const { name, value } = e.target;
-
         setFormData({
             ...formData,
             [name]: value,
@@ -33,37 +36,43 @@ const AddTicket = () => {
 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
-
         setFormDataError(initialFormError);
 
-        const isSubjectValid = await shortText(formData.subject);
+        const isRequesterValid = await shortText(formData.requester);
+        const isContactNumberValid = await shortText(formData.contactNumber);
+        const isProgramCourseValid = await shortText(formData.programCourse);
+        const isDescriptionValid = await shortText(formData.description);
+        const isAreaOfConcernValid = await shortText(formData.areaOfConcern);
+        const isStudentNumberValid = await shortText(formData.studentNumber);
 
         setFormDataError({
             ...initialFormError,
-            subject: !isSubjectValid,
+            requester: !isRequesterValid,
+            contactNumber: !isContactNumberValid,
+            programCourse: !isProgramCourseValid,
+            description: !isDescriptionValid,
+            areaOfConcern: !isAreaOfConcernValid,
+            studentNumber: !isStudentNumberValid,
         });
 
         console.log("Form Submit Request Received", formData);
     };
 
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <PageBreadcrumb page="Add New Ticket" />
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <TicketForm
-                        handleOnChange={handleOnChange}
-                        handleOnSubmit={handleOnSubmit}
-                        formData={formData}
-                        formDataError={formDataError}
-                    />
-                </Col>
-            </Row>
-        </Container>
+        <Sidebar>
+            <Container>
+                <Row>
+                    <Col>
+                        <TicketForm
+                            handleOnChange={handleOnChange}
+                            handleOnSubmit={handleOnSubmit}
+                            formData={formData}
+                            formDataError={formDataError}
+                        />
+                    </Col>
+                </Row>
+            </Container>
+        </Sidebar>
     );
 };
 

@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useState, useRef } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
 const AddTicketForm = ({
@@ -8,12 +7,59 @@ const AddTicketForm = ({
     formData,
     formDataError,
 }) => {
-    console.log(formData);
+    const [description, setDescription] = useState("");
+    const [files, setFiles] = useState([]);
+    const fileInputRef = useRef(null);
+
+    // Function to handle formatting
+    const handleFormat = (command, value = null) => {
+        document.execCommand(command, false, value);
+    };
+
+    // Function to handle description change
+    const handleDescriptionChange = (e) => {
+        const descriptionContent = e.target.innerHTML;
+        setDescription(descriptionContent);
+        handleOnChange({
+            target: {
+                name: "description",
+                value: descriptionContent,
+            },
+        });
+    };
+
+    // Function to handle file upload
+    const handleFileUpload = (e) => {
+        const uploadedFiles = Array.from(e.target.files);
+        setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+    };
+
+    // Function to trigger file input
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
+    };
 
     return (
         <Container className="mt-5">
-            <Row className="justify-content-center">
-                <Col md={8} lg={6}>
+            <Col>
+                <h3
+                    className="mb-5"
+                    style={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        fontSize: "35px",
+                    }}
+                >
+                    Fill up the form
+                    {/* <br />
+                    <span style={{ fontWeight: "100", fontSize: "15px" }}>
+                        Fill up the form
+                    </span> */}
+                </h3>
+            </Col>
+
+            <Row className="justify-content-start">
+                <Col md={11} lg={12}>
                     <div
                         className="shadow p-4 rounded"
                         style={{
@@ -21,80 +67,227 @@ const AddTicketForm = ({
                             border: "1px solid #ddd",
                         }}
                     >
-                        <h3
-                            className="text-center mb-4"
-                            style={{
-                                fontWeight: "600",
-                                color: "#333",
-                                fontSize: "17px",
-                            }}
-                        >
-                            Create a Ticket
-                        </h3>
                         <Form autoComplete="off" onSubmit={handleOnSubmit}>
-                            <Form.Group className="mb-4" as={Row}>
-                                <Form.Label
-                                    column
-                                    sm={2}
-                                    className="fw-bold"
-                                    style={{ color: "#555" }}
-                                >
-                                    Subject
-                                </Form.Label>
-                                <Col sm={10}>
-                                    <Form.Control
-                                        name="subject"
-                                        placeholder="Enter the subject"
-                                        value={formData.subject}
-                                        onChange={handleOnChange}
-                                        required
-                                    />
-                                    <Form.Text className="text-danger">
-                                        {formDataError.subject &&
-                                            "Subject is required!"}
-                                    </Form.Text>
+                            {/* First Row: Requester and Area of Concern */}
+                            <Row className="mb-4">
+                                <Col md={6}>
+                                    <Form.Group>
+                                        <Form.Label
+                                            className="fw-bold"
+                                            style={{ color: "#555" }}
+                                        >
+                                            Requester{" "}
+                                            <span style={{ color: "red" }}>
+                                                *
+                                            </span>
+                                        </Form.Label>
+                                        <Form.Control
+                                            name="requester"
+                                            value={formData.requester}
+                                            onChange={handleOnChange}
+                                            required
+                                        />
+                                        <Form.Text className="text-danger">
+                                            {formDataError.requester &&
+                                                "Requester is required!"}
+                                        </Form.Text>
+                                    </Form.Group>
                                 </Col>
-                            </Form.Group>
-                            <Form.Group className="mb-4" as={Row}>
-                                <Form.Label
-                                    column
-                                    sm={2}
-                                    className="fw-bold"
-                                    style={{ color: "#555" }}
-                                >
-                                    Date
-                                </Form.Label>
-                                <Col sm={10}>
-                                    <Form.Control
-                                        type="date"
-                                        value={formData.issueDate}
-                                        name="issueDate"
-                                        onChange={handleOnChange}
-                                        required
-                                    />
+                                <Col md={6}>
+                                    <Form.Group>
+                                        <Form.Label
+                                            className="fw-bold"
+                                            style={{ color: "#555" }}
+                                        >
+                                            Area of Concern{" "}
+                                            <span style={{ color: "red" }}>
+                                                *
+                                            </span>
+                                        </Form.Label>
+                                        <Form.Control
+                                            name="areaOfConcern"
+                                            value={formData.areaOfConcern}
+                                            onChange={handleOnChange}
+                                            required
+                                        />
+                                        <Form.Text className="text-danger">
+                                            {formDataError.areaOfConcern &&
+                                                "Area of concern is required!"}
+                                        </Form.Text>
+                                    </Form.Group>
                                 </Col>
-                            </Form.Group>
-                            <Form.Group className="mb-4">
-                                <Form.Label
-                                    column
-                                    sm={2}
-                                    className="fw-bold"
-                                    style={{ color: "#555" }}
-                                >
-                                    Details
-                                </Form.Label>
+                            </Row>
+
+                            {/* Second Row: Contact Number and Student Number */}
+                            <Row className="mb-4">
+                                <Col md={6}>
+                                    <Form.Group>
+                                        <Form.Label
+                                            className="fw-bold"
+                                            style={{ color: "#555" }}
+                                        >
+                                            Contact Number{" "}
+                                            <span style={{ color: "red" }}>
+                                                *
+                                            </span>
+                                        </Form.Label>
+                                        <Form.Control
+                                            name="contactNumber"
+                                            value={formData.contactNumber}
+                                            onChange={handleOnChange}
+                                            required
+                                        />
+                                        <Form.Text className="text-danger">
+                                            {formDataError.contactNumber &&
+                                                "Contact number is required!"}
+                                        </Form.Text>
+                                    </Form.Group>
+                                </Col>
+                                <Col md={6}>
+                                    <Form.Group>
+                                        <Form.Label
+                                            className="fw-bold"
+                                            style={{ color: "#555" }}
+                                        >
+                                            Student Number{" "}
+                                            <span style={{ color: "red" }}>
+                                                *
+                                            </span>
+                                        </Form.Label>
+                                        <Form.Control
+                                            name="studentNumber"
+                                            value={formData.studentNumber}
+                                            onChange={handleOnChange}
+                                            required
+                                        />
+                                        <Form.Text className="text-danger">
+                                            {formDataError.studentNumber &&
+                                                "Student number is required!"}
+                                        </Form.Text>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+
+                            {/* Third Row: Program / Course */}
+                            <Row className="mb-4">
                                 <Col>
-                                    <Form.Control
-                                        as="textarea"
-                                        name="detail"
-                                        value={formData.detail}
-                                        rows={5}
-                                        placeholder="Provide detailed information"
-                                        onChange={handleOnChange}
-                                        required
-                                    />
+                                    <Form.Group>
+                                        <Form.Label
+                                            className="fw-bold"
+                                            style={{ color: "#555" }}
+                                        >
+                                            Program / Course{" "}
+                                            <span style={{ color: "red" }}>
+                                                *
+                                            </span>
+                                        </Form.Label>
+                                        <Form.Control
+                                            name="programCourse"
+                                            value={formData.programCourse}
+                                            onChange={handleOnChange}
+                                            required
+                                        />
+                                        <Form.Text className="text-danger">
+                                            {formDataError.programCourse &&
+                                                "Program / Course is required!"}
+                                        </Form.Text>
+                                    </Form.Group>
                                 </Col>
-                            </Form.Group>
+                            </Row>
+
+                            {/* Fourth Row: Description */}
+                            <Row className="mb-4">
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label
+                                            className="fw-bold"
+                                            style={{ color: "#555" }}
+                                        >
+                                            Description{" "}
+                                            <span style={{ color: "red" }}>
+                                                *
+                                            </span>
+                                        </Form.Label>
+                                        <div
+                                            style={{
+                                                border: "1px solid #ced4da",
+                                                borderRadius: "4px",
+                                                padding: "6px 12px",
+                                                minHeight: "100px",
+                                                backgroundColor: "#fff",
+                                            }}
+                                            contentEditable
+                                            onInput={handleDescriptionChange}
+                                            dangerouslySetInnerHTML={{
+                                                __html: description,
+                                            }}
+                                        ></div>
+                                        <div className="mt-2 d-flex align-items-center">
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    handleFormat("bold")
+                                                }
+                                                style={{ marginRight: "5px" }}
+                                            >
+                                                <strong>B</strong>
+                                            </Button>
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    handleFormat("italic")
+                                                }
+                                                style={{ marginRight: "5px" }}
+                                            >
+                                                <em>I</em>
+                                            </Button>
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    handleFormat("underline")
+                                                }
+                                                style={{ marginRight: "5px" }}
+                                            >
+                                                <u>U</u>
+                                            </Button>
+                                            <Button
+                                                variant="light"
+                                                onClick={triggerFileInput}
+                                                style={{ marginRight: "5px" }}
+                                            >
+                                                📎 Attach Files
+                                            </Button>
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                style={{ display: "none" }}
+                                                onChange={handleFileUpload}
+                                                multiple
+                                            />
+                                        </div>
+                                        {files.length > 0 && (
+                                            <div className="mt-2">
+                                                <strong>Attached Files:</strong>
+                                                <ul>
+                                                    {files.map(
+                                                        (file, index) => (
+                                                            <li key={index}>
+                                                                {file.name}
+                                                            </li>
+                                                        )
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        )}
+                                        <Form.Text className="text-danger">
+                                            {formDataError.description &&
+                                                "Description is required!"}
+                                        </Form.Text>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+
+                            {/* Submit Button */}
                             <Button
                                 variant="success"
                                 type="submit"
@@ -112,13 +305,6 @@ const AddTicketForm = ({
             </Row>
         </Container>
     );
-};
-
-AddTicketForm.propTypes = {
-    handleOnSubmit: PropTypes.func.isRequired,
-    handleOnChange: PropTypes.func.isRequired,
-    formData: PropTypes.object.isRequired,
-    formDataError: PropTypes.object.isRequired,
 };
 
 export default AddTicketForm;

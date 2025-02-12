@@ -7,9 +7,9 @@ const PageBreadcrumb = ({ page }) => {
     const location = useLocation();
 
     const breadcrumbMap = {
-        "/dashboard": " ",
-        "/add-ticket": "Create New Ticket",
-        "/tickets": "Ticket Lists",
+        "/admin-dashboard": " ",
+        // "/add-ticket": "Create New Ticket",
+        // "/tickets": "Ticket Lists",
     };
 
     const currentPage =
@@ -25,7 +25,7 @@ const PageBreadcrumb = ({ page }) => {
         >
             <Breadcrumb.Item
                 className="breadcrumb-item"
-                href="/dashboard"
+                href="/admin-dashboard"
                 style={{
                     fontFamily: "TrebuchetMS, sans-serif",
                     textDecoration: "none",

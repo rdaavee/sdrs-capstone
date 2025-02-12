@@ -1,13 +1,13 @@
 import React from "react";
 import Header from "./partials/Header.comp";
-import Footer from "./partials/Footer.comp";
+import EntryHeader from "./partials/Header.comp";
 import { Outlet } from "react-router-dom";
 
 function DefaultLayout({ children }) {
     return (
         <div style={{ backgroundColor: "#F8F9FA" }}>
             <header className="header">
-                <Header />
+                <EntryHeader />
             </header>
             <main className="main">
                 <Outlet />

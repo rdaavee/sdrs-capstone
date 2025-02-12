@@ -3,9 +3,50 @@ import { Table } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
+const getStatusStyle = (status) => {
+    switch (status.toLowerCase()) {
+        case "open":
+            return {
+                backgroundColor: "#d4edda",
+                color: "#155724",
+                borderRadius: "50px",
+                padding: "5px 10px",
+                margin: "7px",
+                display: "inline-block",
+            };
+        case "in progress":
+            return {
+                backgroundColor: "#fff3cd",
+                color: "#856404",
+                borderRadius: "50px",
+                padding: "5px 10px",
+                margin: "7px",
+                display: "inline-block",
+            };
+        case "closed":
+            return {
+                backgroundColor: "#f8d7da",
+                color: "#721c24",
+                borderRadius: "50px",
+                padding: "5px 10px",
+                margin: "7px",
+                display: "inline-block",
+            };
+        default:
+            return {
+                backgroundColor: "#d1ecf1",
+                color: "#0c5460",
+                borderRadius: "50px",
+                padding: "5px 10px",
+                margin: "7px",
+                display: "inline-block",
+            };
+    }
+};
+
 const TicketTable = ({ tickets }) => {
     return (
-        <Table striped bordered hover>
+        <Table bordered>
             <thead>
                 <tr>
                     <th>#</th>
@@ -26,7 +67,12 @@ const TicketTable = ({ tickets }) => {
                                 </Link>
                             </td>
                             <td>{row.course}</td>
-                            <td>{row.status}</td>
+                            <td
+                                className="status d-flex text-center"
+                                style={getStatusStyle(row.status)}
+                            >
+                                {row.status}
+                            </td>
                             <td>{row.addedAt}</td>
                         </tr>
                     ))

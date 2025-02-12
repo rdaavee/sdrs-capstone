@@ -15,20 +15,21 @@ const Header = () => {
     const [userPhoto, setUserPhoto] = useState(defaultAvatar);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                if (user.photoURL) {
-                    setUserPhoto(user.photoURL);
-                } else {
-                    setUserPhoto(defaultAvatar);
-                }
-            } else {
-                setUserPhoto(defaultAvatar);
-            }
-        });
-        return () => unsubscribe();
-    }, []); 
+    //TODO:: Uncomment this code to enable user photo
+    // useEffect(() => {
+    //     const unsubscribe = auth.onAuthStateChanged((user) => {
+    //         if (user) {
+    //             if (user.photoURL) {
+    //                 setUserPhoto(user.photoURL);
+    //             } else {
+    //                 setUserPhoto(defaultAvatar);
+    //             }
+    //         } else {
+    //             setUserPhoto(defaultAvatar);
+    //         }
+    //     });
+    //     return () => unsubscribe();
+    // }, []);
 
     const handleLogoClick = () => {
         setLoading(true);
@@ -85,7 +86,7 @@ const Header = () => {
                             cursor: "pointer",
                         }}
                     >
-                        UPang Online Helpdesk
+                        UPang Admin
                     </span>
                 </div>
             </Navbar.Brand>

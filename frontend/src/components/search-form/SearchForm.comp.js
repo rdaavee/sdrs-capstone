@@ -8,13 +8,12 @@ const SearchForm = ({ handleOnChange, str }) => {
             <Form>
                 <Form.Group as={Row}>
                     <Form.Label column ms={2}>
-                        Search
                         <Col ms={10}>
                             <Form.Control
                                 onChange={handleOnChange}
                                 value={str}
                                 name="searchStr"
-                                placeholder="Search ..."
+                                placeholder="Search"
                             />
                         </Col>
                     </Form.Label>

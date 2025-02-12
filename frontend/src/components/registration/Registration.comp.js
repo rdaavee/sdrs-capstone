@@ -39,7 +39,7 @@ const RegistrationForm = () => {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/user/register",
+                "http://localhost:5000/auth/register",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -109,7 +109,7 @@ const RegistrationForm = () => {
                         <strong className="me-auto">UPang Toast</strong>
                     </Toast.Header>
                     <Toast.Body className="text-white">
-                        You have successfully registered nigga
+                        You have successfully registered
                     </Toast.Body>
                 </Toast>
 

@@ -50,6 +50,7 @@ const LoginForm = ({ handleOnFormChange }) => {
 
             if (response.ok) {
                 localStorage.setItem("token", result.token);
+                localStorage.setItem("email", formData.email);
                 setShowToast(true);
 
                 setTimeout(() => {
