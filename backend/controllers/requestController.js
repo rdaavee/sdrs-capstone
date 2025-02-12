@@ -1,4 +1,5 @@
 const requestService = require("../services/requestService");
+const { getIO } = require("../socket");
 
 async function createRequestCtrl(req, res) {
     try {
@@ -30,4 +31,31 @@ async function getRequestCtrl(req, res) {
     }
 }
 
-module.exports = { createRequestCtrl, getRequestCtrl };
+async function updateRequestStatusCtrl(req, res) {
+    try {
+        const { status } = req.body;
+        const updatedRequest = await requestService.updateRequestStatus(
+            req.params.id,
+            status
+        );
+
+        if (!updatedRequest) {
+            return res.status(404).json({ message: "Request not found" });
+        }
+
+        getIO().emit("requestUpdated", updatedRequest);
+
+        res.json({
+            request: updatedRequest,
+            message: "Request status updated successfully",
+        });
+    } catch (error) {
+        console.error("Error updating request status:", error);
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message,
+        });
+    }
+}
+
+module.exports = { createRequestCtrl, getRequestCtrl, updateRequestStatusCtrl };

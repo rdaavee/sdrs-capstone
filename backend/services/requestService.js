@@ -15,6 +15,7 @@ async function createRequest(requestData) {
         municipality,
         barangay,
         sampleDocument,
+        status,
     } = requestData;
 
     const createdRequest = new Request({
@@ -31,6 +32,7 @@ async function createRequest(requestData) {
         municipality,
         barangay,
         sampleDocument,
+        status,
     });
 
     const savedRequest = await createdRequest.save();
@@ -42,4 +44,12 @@ async function getRequest() {
     return requests;
 }
 
-module.exports = { createRequest, getRequest };
+async function updateRequestStatus(requestId, status) {
+    return await Request.findByIdAndUpdate(
+        requestId,
+        { status },
+        { new: true }
+    );
+}
+
+module.exports = { createRequest, getRequest, updateRequestStatus };

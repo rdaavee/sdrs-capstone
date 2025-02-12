@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import Sidebar from "../../layouts/partials/Sidebar.comp";
 import "./AdminDashboard.style.css";
 
+import { io } from "socket.io-client";
+const socket = io("http://localhost:5000");
+
 const Dashboard = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -26,25 +29,72 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchRequests();
+
+        socket.on("requestUpdated", (updatedRequest) => {
+            setRequests((prevRequests) =>
+                prevRequests.map((req) =>
+                    req.referenceNumber === updatedRequest.referenceNumber
+                        ? updatedRequest
+                        : req
+                )
+            );
+        });
+
+        return () => {
+            socket.off("requestUpdated");
+        };
     }, []);
 
     const getStatusClass = (status) => {
         switch (status) {
+            case "Request Sent":
+                return "status-not-started";
             case "Processing":
                 return "status-processing";
-            case "Ready to pick up":
+            case "Pick Up":
                 return "status-ready";
             case "Completed":
                 return "status-completed";
             default:
-                return "status-processing";
+                return "status-not-started";
+        }
+    };
+
+    const updateStatus = async (id, newStatus) => {
+        try {
+            const response = await fetch(
+                `http://localhost:5000/request/update/${id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ status: newStatus }),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to update status");
+            }
+
+            setRequests((prevRequests) =>
+                prevRequests.map((request) =>
+                    request._id === id
+                        ? { ...request, status: newStatus }
+                        : request
+                )
+            );
+
+            console.log("Status updated successfully!");
+        } catch (error) {
+            console.error("Error updating status:", error);
         }
     };
 
     // Handle search filtering
     const filteredRequests = requests.filter(
         (request) =>
-            request.$studentNumber
+            request.studentNumber
                 ?.toLowerCase()
                 .includes(searchTerm.toLowerCase()) ||
             request.sampleDocument
@@ -73,7 +123,7 @@ const Dashboard = () => {
                     placeholder="Search requests..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="mb-4 p-2 border border-gray-300 rounded"
+                    className="mb-4 p-2 border border-gray-300 rounded bg-white w-full text-black"
                 />
                 {loading ? (
                     <p>Loading requests...</p>
@@ -123,13 +173,27 @@ const Dashboard = () => {
                                             {request.mobileNumber}
                                         </td>
                                         <td className="p-4">
-                                            <span
-                                                className={`status-chip ${getStatusClass(
-                                                    request.status
-                                                )}`}
+                                            <select
+                                                value={request.status}
+                                                onChange={(e) =>
+                                                    updateStatus(
+                                                        request._id,
+                                                        e.target.value
+                                                    )
+                                                }
+                                                className="border p-2 rounded"
                                             >
-                                                {request.status || "Processing"}
-                                            </span>
+                                                <option value="Not Started"></option>
+                                                <option value="Processing">
+                                                    Processing
+                                                </option>
+                                                <option value="Pick Up">
+                                                    Pick Up
+                                                </option>
+                                                <option value="Completed">
+                                                    Completed
+                                                </option>
+                                            </select>
                                         </td>
                                         <td className="p-4">
                                             <button className="text-blue-500 hover:underline">

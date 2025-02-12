@@ -3,7 +3,7 @@ const mongoose = require("../config/dbConfig");
 const requestSchema = new mongoose.Schema(
     {
         referenceNumber: { type: String, unique: true },
-        studentNumber: Number,
+        studentNumber: String,
         firstName: String,
         middleName: String,
         lastName: String,
@@ -18,6 +18,8 @@ const requestSchema = new mongoose.Schema(
         municipality: String,
         barangay: String,
         sampleDocument: String,
+        status: String,
+        date: { type: Date, default: Date.now },
     },
     { timestamps: true }
 );

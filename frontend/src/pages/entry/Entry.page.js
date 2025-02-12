@@ -35,6 +35,31 @@ const EntryPage = () => {
         }, 1500);
     };
 
+    const courses = [
+        "Bachelor of Science in Accountancy",
+        "Bachelor of Science in Management Accounting",
+        "Bachelor of Science in Accountancy Technology",
+        "Bachelor of Science in Hospitality Management",
+        "Bachelor of Science in Tourism Management",
+        "Bachelor of Science in Business Administration",
+        "Bachelor of Science in Business Administration Major in Marketing Management",
+        "Bachelor of Science in Business Administration Major in Financial Management",
+        "Bachelor of Arts in Political Science",
+        "Bachelor of Science in Elementary Education",
+        "Bachelor of Secondary Education",
+        "Bachelor of Science in Criminology",
+        "Bachelor of Science in Architecture",
+        "Bachelor of Science in Computer Engineering",
+        "Bachelor of Science in Civil Engineering",
+        "Bachelor of Science in Electrical Engineering",
+        "Bachelor of Science in Mechanical Engineering",
+        "Bachelor of Science in Nursing",
+        "Bachelor of Science in Pharmacy",
+        "Bachelor in Medical Laboratory Science",
+        "Bachelor of Science in Psychology",
+        "Bachelor of Science in Information Technology",
+    ];
+
     const [formData, setFormData] = useState({
         referenceNumber: "",
         studentNumber: "",
@@ -480,15 +505,26 @@ const EntryPage = () => {
                                     </div>
 
                                     <div className="form-field">
-                                        <label htmlFor="degree">
+                                        <label htmlFor="course">
                                             Course <span>*</span>
                                         </label>
-                                        <input
-                                            type="text"
+                                        <select
                                             id="course"
                                             value={formData.course}
                                             onChange={handleChange}
-                                        />
+                                        >
+                                            <option value="">
+                                                Select Course
+                                            </option>
+                                            {courses.map((course, index) => (
+                                                <option
+                                                    key={index}
+                                                    value={course}
+                                                >
+                                                    {course}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
 
                                     <div className="form-field">

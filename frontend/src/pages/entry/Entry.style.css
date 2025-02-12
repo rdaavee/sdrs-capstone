@@ -1,3 +1,7 @@
+body {
+    background-color: #fff;
+}
+
 .loading-container {
     position: fixed;
     top: 50%;
@@ -30,10 +34,6 @@
 * {
     font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
         "Lucida Sans", Arial, sans-serif;
-}
-
-body {
-    background-color: black;
 }
 
 .location {
