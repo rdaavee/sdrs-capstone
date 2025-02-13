@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ToastContainer, Toast, Nav, Dropdown, Col } from "react-bootstrap";
-import { AiOutlineFileAdd } from "react-icons/ai";
 
 import useLocationData from "../../hooks/useLocationData";
 import useAuth from "../../hooks/useAuth";
 import useOfficeHours from "../../hooks/useOfficeHours";
 
+import { AiOutlineFileAdd } from "react-icons/ai";
 import upangLogo from "../../assets/images/upang-logo.png";
 
 import "./Entry.style.css";
@@ -174,71 +174,51 @@ const EntryPage = () => {
                 </Toast>
             </ToastContainer>
 
-            <div
-                className="d-flex flex-column text-white text-center"
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    textAlign: "center",
-                    position: "relative",
-                    height: "300px",
-                    backgroundImage:
-                        'linear-gradient(to bottom, rgba(113, 184, 40, 0.3), rgba(0, 0, 0, 1) 100%), url("../../assets/images/bg.jpg")',
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    color: "white",
-                }}
-            >
-                <div className="d-flex justify-content-between w-100 mb-5">
-                    <img
-                        src={upangLogo}
-                        className="px-5 my-auto"
-                        alt=""
-                        height={65}
-                    />
-                    {!isLoggedIn ? (
-                        <button
-                            onClick={handleLoginButton}
-                            className="login-button"
-                        >
-                            Login
-                        </button>
-                    ) : (
-                        <Nav
-                            onMouseEnter={() => setShowDropdown(true)}
-                            onMouseLeave={() => setShowDropdown(false)}
-                        >
-                            <Dropdown show={showDropdown}>
-                                <Dropdown.Toggle
-                                    as="div"
-                                    className="px-5 my-auto"
-                                >
-                                    <img
-                                        src={userPhoto}
-                                        alt="User Avatar"
-                                        width={55}
-                                        height={55}
-                                        className="rounded-circle align-items-center justify-content-center my-auto"
-                                        style={{
-                                            objectFit: "cover",
-                                            border: "2px solid #ddd",
-                                            cursor: "pointer",
-                                            marginRight: "10px",
-                                        }}
-                                    />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onClick={handleLogout}>
-                                        Logout
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </Nav>
-                    )}
-                </div>
+            <div className="d-flex justify-content-between py-2">
+                <img
+                    src={upangLogo}
+                    className="px-5 my-auto"
+                    alt=""
+                    height={65}
+                />
+                {!isLoggedIn ? (
+                    <button
+                        onClick={handleLoginButton}
+                        className="login-button"
+                    >
+                        Login
+                    </button>
+                ) : (
+                    <Nav
+                        onMouseEnter={() => setShowDropdown(true)}
+                        onMouseLeave={() => setShowDropdown(false)}
+                    >
+                        <Dropdown show={showDropdown}>
+                            <Dropdown.Toggle as="div" className="px-5 my-auto">
+                                <img
+                                    src={userPhoto}
+                                    alt="User Avatar"
+                                    width={55}
+                                    height={55}
+                                    className="rounded-circle align-items-center justify-content-center my-auto"
+                                    style={{
+                                        objectFit: "cover",
+                                        border: "2px solid #ddd",
+                                        cursor: "pointer",
+                                        marginRight: "10px",
+                                    }}
+                                />
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={handleLogout}>
+                                    Logout
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Nav>
+                )}
+            </div>
+            <div className="d-flex flex-column text-white text-center entry-header">
                 <div className="mb-5">
                     <h1 className="location fw-bold">
                         PHINMA - University of Pangasinan <br />
@@ -366,7 +346,7 @@ const EntryPage = () => {
                                 <input
                                     type="text"
                                     placeholder="Reference Number"
-                                    className="input"
+                                    className="input track-reference"
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
@@ -377,7 +357,7 @@ const EntryPage = () => {
                                 <input
                                     type="text"
                                     placeholder="4-digit PIN"
-                                    className="input"
+                                    className="input track-pin"
                                     // onChange={(e) =>
                                     //     setReferenceNumber(e.target.value)
                                     // }
