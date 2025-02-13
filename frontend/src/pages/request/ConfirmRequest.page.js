@@ -123,6 +123,10 @@ const ConfirmRequest = () => {
                                 <strong>Document</strong>
                                 <span>{formData.sampleDocument}</span>
                             </div>
+                            <div className="info-item">
+                                <strong>Fee</strong>
+                                <span>₱{formData.documentFee || "N/A"}</span>
+                            </div>
                         </div>
                     </Col>
                 </Row>

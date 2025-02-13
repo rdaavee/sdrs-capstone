@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ToastContainer, Toast, Nav, Dropdown, Col } from "react-bootstrap";
+import axios from "axios";
 
 import useLocationData from "../../hooks/useLocationData";
 import useAuth from "../../hooks/useAuth";
@@ -22,6 +23,9 @@ const EntryPage = () => {
 
     const { isLoggedIn, userPhoto, handleLogout } = useAuth();
     const { isOpen } = useOfficeHours();
+
+    const [documentFees, setDocumentFees] = useState({});
+    const [selectedFee, setSelectedFee] = useState(0);
 
     const navigate = useNavigate();
 
@@ -113,6 +117,30 @@ const EntryPage = () => {
             referenceNumber: refNumber,
         }));
         setRequest((prev) => !prev);
+    };
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:5000/documents")
+            .then((response) => {
+                const fees = {};
+                response.data.forEach((doc) => {
+                    fees[doc.name] = doc.fee;
+                });
+                setDocumentFees(fees);
+            })
+            .catch((error) =>
+                console.error("Error fetching document fees:", error)
+            );
+    }, []);
+
+    const handleDocumentChange = (event) => {
+        const selectedDoc = event.target.value;
+        setFormData((prevState) => ({
+            ...prevState,
+            sampleDocument: selectedDoc,
+            documentFee: documentFees[selectedDoc] || 0,
+        }));
     };
 
     useEffect(() => {
@@ -621,20 +649,21 @@ const EntryPage = () => {
                                             <select
                                                 id="sampleDocument"
                                                 value={formData.sampleDocument}
-                                                onChange={handleChange}
+                                                onChange={handleDocumentChange}
                                             >
                                                 <option value="">
                                                     Select Document
                                                 </option>
-                                                <option value="Transcript">
-                                                    Transcript
-                                                </option>
-                                                <option value="Certificate">
-                                                    Certificate
-                                                </option>
-                                                <option value="Other">
-                                                    Other
-                                                </option>
+                                                {Object.keys(documentFees).map(
+                                                    (doc) => (
+                                                        <option
+                                                            key={doc}
+                                                            value={doc}
+                                                        >
+                                                            {doc}
+                                                        </option>
+                                                    )
+                                                )}
                                             </select>
                                         </div>
                                     </div>
@@ -658,20 +687,21 @@ const EntryPage = () => {
                                             <select
                                                 id="sampleDocument"
                                                 value={formData.sampleDocument}
-                                                onChange={handleChange}
+                                                onChange={handleDocumentChange}
                                             >
                                                 <option value="">
                                                     Select Document
                                                 </option>
-                                                <option value="Transcript">
-                                                    Transcript
-                                                </option>
-                                                <option value="Certificate">
-                                                    Certificate
-                                                </option>
-                                                <option value="Other">
-                                                    Other
-                                                </option>
+                                                {Object.keys(documentFees).map(
+                                                    (doc) => (
+                                                        <option
+                                                            key={doc}
+                                                            value={doc}
+                                                        >
+                                                            {doc}
+                                                        </option>
+                                                    )
+                                                )}
                                             </select>
                                         </div>
                                     </div>
