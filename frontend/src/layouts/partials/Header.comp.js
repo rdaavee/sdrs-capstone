@@ -91,7 +91,7 @@ const Header = () => {
                 </div>
             </Navbar.Brand>
             <div className="d-none d-md-block">
-                <PageBreadcrumb page={location.pathname} />
+                {/* <PageBreadcrumb page={location.pathname} /> */}
             </div>
             <Nav className="ms-auto d-flex align-items-center">
                 <Nav.Link

@@ -10,7 +10,9 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
+    const itemsPerPage = 4;
+
+    const [updating, setUpdating] = useState(false);
 
     const fetchRequests = async () => {
         try {
@@ -47,8 +49,6 @@ const Dashboard = () => {
 
     const getStatusClass = (status) => {
         switch (status) {
-            case "Request Sent":
-                return "status-not-started";
             case "Processing":
                 return "status-processing";
             case "Pick Up":
@@ -56,7 +56,7 @@ const Dashboard = () => {
             case "Completed":
                 return "status-completed";
             default:
-                return "status-not-started";
+                return "";
         }
     };
 
@@ -147,9 +147,9 @@ const Dashboard = () => {
                                     <th className="p-4 text-left font-semibold">
                                         Status
                                     </th>
-                                    <th className="p-4 text-left font-semibold">
+                                    {/* <th className="p-4 text-left font-semibold">
                                         Actions
-                                    </th>
+                                    </th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,67 +167,68 @@ const Dashboard = () => {
                                         <td className="p-4">
                                             {request.sampleDocument}
                                         </td>
-                                        <td className="p-4">
+                                        <td className="p-4 contact">
                                             {request.email}
                                             <br />
                                             {request.mobileNumber}
                                         </td>
-                                        <td className="p-4">
-                                            <select
-                                                value={request.status}
-                                                onChange={(e) =>
-                                                    updateStatus(
-                                                        request._id,
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className="border p-2 rounded"
+                                        <td>
+                                            <div
+                                                className={`status-chip ${getStatusClass(
+                                                    request.status
+                                                )}`}
                                             >
-                                                <option value="Not Started"></option>
-                                                <option value="Processing">
-                                                    Processing
-                                                </option>
-                                                <option value="Pick Up">
-                                                    Pick Up
-                                                </option>
-                                                <option value="Completed">
-                                                    Completed
-                                                </option>
-                                            </select>
+                                                <select
+                                                    value={request.status}
+                                                    onChange={(e) =>
+                                                        updateStatus(
+                                                            request._id,
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    disabled={updating}
+                                                >
+                                                    <option value="Request Sent">
+                                                        Request Sent
+                                                    </option>
+                                                    <option value="Processing">
+                                                        Processing
+                                                    </option>
+                                                    <option value="Pick Up">
+                                                        Pick Up
+                                                    </option>
+                                                    <option value="Completed">
+                                                        Completed
+                                                    </option>
+                                                </select>
+                                            </div>
                                         </td>
-                                        <td className="p-4">
+
+                                        {/* <td className="p-4">
                                             <button className="text-blue-500 hover:underline">
                                                 Edit
                                             </button>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
 
                         {/* Pagination Controls */}
-                        <div className="flex justify-between items-center mt-4">
-                            <button
-                                className="p-2 bg-gray-300 rounded disabled:opacity-50"
-                                onClick={() =>
-                                    handlePageChange(currentPage - 1)
-                                }
-                                disabled={currentPage === 1}
-                            >
-                                Previous
-                            </button>
-                            <p>
-                                Page {currentPage} of {totalPages}
-                            </p>
-                            <button
-                                className="p-2 bg-gray-300 rounded disabled:opacity-50"
-                                onClick={() =>
-                                    handlePageChange(currentPage + 1)
-                                }
-                                disabled={currentPage === totalPages}
-                            >
-                                Next
-                            </button>
+                        <div className="pagination-container">
+                            {Array.from({ length: totalPages }, (_, index) => (
+                                <button
+                                    key={index}
+                                    className={`pagination-button ${
+                                        currentPage === index + 1
+                                            ? "active"
+                                            : ""
+                                    }`}
+                                    onClick={() => handlePageChange(index + 1)}
+                                >
+                                    {index + 1}
+                                </button>
+                            ))}
                         </div>
                     </div>
                 )}
