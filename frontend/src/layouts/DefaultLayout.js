@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "./partials/Header.comp";
 import EntryHeader from "./partials/Header.comp";
 import { Outlet } from "react-router-dom";
 

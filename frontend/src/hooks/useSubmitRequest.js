@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createRequest } from "../services/api";
 
 const useSubmitRequest = (formData) => {
     const [loading, setLoading] = useState(false);
@@ -21,25 +22,11 @@ const useSubmitRequest = (formData) => {
         setError("");
 
         try {
-            const response = await fetch(
-                "http://localhost:5000/request/create-request",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData),
-                }
-            );
-            const result = await response.json();
-
-            if (response.ok) {
-                setShowToast(true);
-                setTimeout(() => navigate("/"), 1500);
-            } else {
-                setError(result.message || "Submit Request error");
-                setShowErrorToast(true);
-            }
+            await createRequest(formData);
+            setShowToast(true);
+            setTimeout(() => navigate("/"), 1500);
         } catch (error) {
-            setError("An error occurred. Please try again");
+            setError(error.message);
             setShowErrorToast(true);
         } finally {
             setLoading(false);

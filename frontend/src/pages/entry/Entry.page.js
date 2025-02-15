@@ -12,6 +12,7 @@ import { AiOutlineFileAdd } from "react-icons/ai";
 import upangLogo from "../../assets/images/upang-logo.png";
 
 import "./Entry.style.css";
+import { fetchDocumentFees, fetchTrackerRequest } from "../../services/api";
 
 const EntryPage = () => {
     const [activeTab, setActiveTab] = useState("newRequest");
@@ -120,18 +121,15 @@ const EntryPage = () => {
     };
 
     useEffect(() => {
-        axios
-            .get("http://localhost:5000/documents")
-            .then((response) => {
+        fetchDocumentFees()
+            .then((data) => {
                 const fees = {};
-                response.data.forEach((doc) => {
+                data.forEach((doc) => {
                     fees[doc.name] = doc.fee;
                 });
                 setDocumentFees(fees);
             })
-            .catch((error) =>
-                console.error("Error fetching document fees:", error)
-            );
+            .catch((error) => console.error(error.message));
     }, []);
 
     const handleDocumentChange = (event) => {
@@ -166,20 +164,20 @@ const EntryPage = () => {
         );
     }
 
-    const handleTrackerRequest = async () => {
+    const handleTrackerRequest = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+    
         try {
-            const response = await fetch(
-                `http://localhost:5000/tracker/${formData.referenceNumber}`
-            );
-            if (response.ok) {
-                const data = await response.json();
+            const data = await fetchTrackerRequest(formData.referenceNumber);
+    
+            setTimeout(() => {
+                setLoading(false);
                 navigate("/tracker-request", { state: data });
-            } else {
-                alert("Request not found or invalid reference number.");
-            }
+            }, 1500);
         } catch (error) {
-            console.error("Error fetching request:", error);
-            alert("Failed to fetch request data.");
+            setLoading(false);
+            alert(error.message);
         }
     };
 

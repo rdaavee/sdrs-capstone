@@ -14,6 +14,7 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { signInWithGoogle } from "../../utils/firebase";
+import { loginUser } from "../../services/api";
 
 import logoImg from "../../assets/images/phinma-cservice-logo.png";
 import studentImg from "../../assets/images/login-img.svg";
@@ -41,27 +42,17 @@ const LoginForm = ({ handleOnFormChange }) => {
         setError("");
 
         try {
-            const response = await fetch("http://localhost:5000/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            });
-            const result = await response.json();
+            const result = await loginUser(formData);
 
-            if (response.ok) {
-                localStorage.setItem("token", result.token);
-                localStorage.setItem("email", formData.email);
-                setShowToast(true);
+            localStorage.setItem("token", result.token);
+            localStorage.setItem("email", formData.email);
+            setShowToast(true);
 
-                setTimeout(() => {
-                    navigate("/");
-                }, 1500);
-            } else {
-                setError(result.message || "Login failed");
-                setShowErrorToast(true);
-            }
+            setTimeout(() => {
+                navigate("/");
+            }, 1500);
         } catch (error) {
-            setError("An error occurred. Please try again.");
+            setError(error.message);
             setShowErrorToast(true);
         } finally {
             setLoading(false);

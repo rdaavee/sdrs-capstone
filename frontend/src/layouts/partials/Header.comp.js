@@ -94,8 +94,8 @@ const Header = () => {
                 {/* <PageBreadcrumb page={location.pathname} /> */}
             </div>
             <Nav className="ms-auto d-flex align-items-center">
-                <Nav.Link
-                    href="/notifications"
+                {/* <Nav.Link
+                    href="/"
                     className="text-dark position-relative"
                     style={{ marginRight: "10px" }}
                 >
@@ -105,9 +105,9 @@ const Header = () => {
                         width={25}
                         height={25}
                     />
-                </Nav.Link>
+                </Nav.Link> */}
 
-                <Nav.Link href="/profile" className="text-dark">
+                <Nav.Link href="/" className="text-dark">
                     <img
                         src={userPhoto}
                         alt="User Avatar"

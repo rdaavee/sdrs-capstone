@@ -1,37 +1,33 @@
 import { useState, useEffect } from "react";
+import { fetchCurrentTime } from "../services/api";
 
 const useOfficeHours = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const checkOfficeHours = async () => {
-            try {
-                const response = await fetch(
-                    "https://timeapi.io/api/Time/current/zone?timeZone=Asia/Manila"
-                );
-                const data = await response.json();
+            const data = await fetchCurrentTime();
+            if (!data) return;
 
-                const day = data.dayOfWeek;
-                const hours = data.hour;
-                const minutes = data.minute;
+            const day = data.dayOfWeek;
+            const hours = data.hour;
+            const minutes = data.minute;
 
-                const isWeekday = [
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Sunday",
-                ].includes(day);
-                const isWorkingHours =
-                    (hours > 0 && hours < 24) ||
-                    (hours === 0 && minutes >= 0) ||
-                    (hours === 23 && minutes === 59);
+            const isWeekday = [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+            ].includes(day);
+            const isWorkingHours =
+                (hours > 0 && hours < 24) ||
+                (hours === 0 && minutes >= 0) ||
+                (hours === 23 && minutes === 59);
 
-                setIsOpen(isWeekday && isWorkingHours);
-            } catch (error) {
-                console.error("Error fetching time:", error);
-            }
+            setIsOpen(isWeekday && isWorkingHours);
         };
 
         checkOfficeHours();

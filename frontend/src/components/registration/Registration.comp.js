@@ -14,6 +14,7 @@ import logoImg from "../../assets/images/phinma-cservice-logo.png";
 import studentImg from "../../assets/images/login-img.svg";
 import "../../assets/fonts/fonts.css";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../services/api";
 
 const RegistrationForm = () => {
     const navigate = useNavigate();
@@ -38,27 +39,13 @@ const RegistrationForm = () => {
         setError("");
 
         try {
-            const response = await fetch(
-                "http://localhost:5000/auth/register",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData),
-                }
-            );
-            const result = await response.json();
-
-            if (response.ok) {
-                setShowSuccessToast(true);
-                setTimeout(() => {
-                    navigate("/login");
-                }, 1500);
-            } else {
-                setError(result.message || "Registration failed");
-                setShowErrorToast(true);
-            }
+            await registerUser(formData);
+            setShowSuccessToast(true);
+            setTimeout(() => {
+                navigate("/login");
+            }, 1500);
         } catch (error) {
-            setError("An error occurred. Please try again.");
+            setError(error.message);
             setShowErrorToast(true);
         } finally {
             setLoading(false);
