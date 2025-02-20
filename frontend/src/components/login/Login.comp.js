@@ -11,6 +11,7 @@ import {
     Toast,
     ToastContainer,
 } from "react-bootstrap";
+import { jwtDecode } from "jwt-decode";
 
 import { useNavigate } from "react-router-dom";
 import { signInWithGoogle } from "../../utils/firebase";
@@ -44,12 +45,37 @@ const LoginForm = ({ handleOnFormChange }) => {
         try {
             const result = await loginUser(formData);
 
+            console.log("Login result:", result);
+
+            console.log(formData);
+
             localStorage.setItem("token", result.token);
             localStorage.setItem("email", formData.email);
+
+            console.log(result.token);
             setShowToast(true);
 
+            const decodedToken = jwtDecode(String(result.token));
+            console.log("Decoded token:", decodedToken);
+
             setTimeout(() => {
-                navigate("/");
+                switch (decodedToken.role) {
+                    case "super-admin":
+                        navigate("/admin-dashboard");
+                        break;
+                    case "middle-admin":
+                        navigate("/middle-admin-dashboard");
+                        break;
+                    case "staff-admin":
+                        navigate("/staff-admin");
+                        break;
+                    case "user":
+                        navigate("/");
+                        break;
+                    default:
+                        navigate("/login");
+                        break;
+                }
             }, 1500);
         } catch (error) {
             setError(error.message);
