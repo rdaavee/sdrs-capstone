@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchCurrentTime } from "../services/api";
 
 const useOfficeHours = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true); //change to true to check request form
 
     useEffect(() => {
         const checkOfficeHours = async () => {

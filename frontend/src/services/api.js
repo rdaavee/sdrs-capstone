@@ -69,6 +69,27 @@ export const createRequest = async (formData) => {
     }
 };
 
+export const createRequestedDocument = async ({ referenceNumber, documentID }) => {
+    try {
+        const response = await fetch(`${BASE_API_URL}/request/create-requested-document`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ referenceNumber, documentID }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Error adding document to request");
+        }
+
+        return result;
+    } catch (error) {
+        throw new Error(error.message || "An error occurred. Please try again");
+    }
+};
+
+
 //get requests
 export const fetchRequests = async () => {
     try {

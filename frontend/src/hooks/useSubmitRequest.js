@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createRequest } from "../services/api";
+import { createRequestedDocument } from "../services/api";
 
 const useSubmitRequest = (formData) => {
     const [loading, setLoading] = useState(false);
@@ -23,6 +24,17 @@ const useSubmitRequest = (formData) => {
 
         try {
             await createRequest(formData);
+            const referenceNumber = formData.referenceNumber; 
+            if (referenceNumber) {
+                await Promise.all(
+                    formData.selectedDocuments.map(async (documentID) => {
+                        await createRequestedDocument({
+                            referenceNumber,
+                            documentID
+                        });
+                    })
+                );
+            }
             setShowToast(true);
             setTimeout(() => navigate("/"), 1500);
         } catch (error) {

@@ -17,7 +17,7 @@ const requestSchema = new mongoose.Schema(
         province: String,
         municipality: String,
         barangay: String,
-        sampleDocument: String,
+        requestedDocumentsID: String,
         status: String,
         date: { type: Date, default: Date.now },
     },

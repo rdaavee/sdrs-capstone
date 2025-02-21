@@ -14,6 +14,8 @@ const ConfirmRequest = () => {
     const location = useLocation();
     const { ...formData } = location.state || {};
 
+    console.log(formData)
+
     const {
         handleSubmit,
         handleCancel,

@@ -1,15 +1,10 @@
 const mongoose = require("../config/dbConfig");
 
-const ticketSchema = new mongoose.Schema({
-    requester: String,
-    areaOfConcern: String,
-    contactNumber: Number,
-    studentNumber: Number,
-    ticketNumber: Number,
-    status: Boolean,
-    course: String,
-    description: String,
+const requestedDocumentsSchema = new mongoose.Schema({
+    referenceNumber: String,
+    documentID: String,
+    date: { type: Date, default: Date.now } ,
 });
 
-module.exports = { ticketSchema };
-x;
+
+module.exports = mongoose.model("RequestedDocument", requestedDocumentsSchema)

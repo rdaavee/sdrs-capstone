@@ -1,3 +1,4 @@
+const { createRequestedDocument } = require("../controllers/requestController");
 const Request = require("../models/requestModel");
 
 async function createRequest(requestData) {
@@ -16,6 +17,7 @@ async function createRequest(requestData) {
         barangay,
         sampleDocument,
         status,
+
     } = requestData;
 
     const createdRequest = new Request({
@@ -33,6 +35,7 @@ async function createRequest(requestData) {
         barangay,
         sampleDocument,
         status,
+
     });
 
     const savedRequest = await createdRequest.save();
