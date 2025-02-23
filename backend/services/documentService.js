@@ -1,9 +1,9 @@
 const Document = require("../models/documentModel");
 
 async function createDocument(documentData) {
-    const { name, fee } = documentData;
+    const { name, documentFee } = documentData;
 
-    const createdDocument = new Document({ name, fee });
+    const createdDocument = new Document({ name, documentFee });
     const savedDocument = await createdDocument.save();
     return savedDocument;
 }

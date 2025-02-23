@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require("../config/dbConfig");
 
 const documentSchema = new mongoose.Schema({
-    documentID: { type: String, required:true},
+    documentID: { type: String, required: true },
     name: { type: String, required: true },
-    fee: { type: Number, required: true },
+    documentFee: { type: Number, required: true },
+    date: { type: Date, default: Date.now },
 });
-const Document = mongoose.model("Document", documentSchema);
 
-module.exports = Document;
+module.exports = mongoose.model("Document", documentSchema);

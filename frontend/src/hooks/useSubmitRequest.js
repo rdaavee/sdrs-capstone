@@ -24,13 +24,13 @@ const useSubmitRequest = (formData) => {
 
         try {
             await createRequest(formData);
-            const referenceNumber = formData.referenceNumber; 
+            const referenceNumber = formData.referenceNumber;
             if (referenceNumber) {
                 await Promise.all(
                     formData.selectedDocuments.map(async (documentID) => {
                         await createRequestedDocument({
                             referenceNumber,
-                            documentID
+                            documentID,
                         });
                     })
                 );

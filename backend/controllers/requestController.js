@@ -19,26 +19,32 @@ async function createRequestCtrl(req, res) {
     }
 }
 
-async function createRequestedDocument (req, res) {
+async function createRequestedDocument(req, res) {
     try {
-        const { referenceNumber, documentID } = req.body;
-        console.log(req.body)
+        const { referenceNumber, documentID, documentFee } = req.body;
+        console.log(req.body);
 
         if (!referenceNumber || !documentID) {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
-        const newRequestedDocument = new documentModel({ referenceNumber, documentID });
+        const newRequestedDocument = new documentModel({
+            referenceNumber,
+            documentID,
+            documentFee
+        });
         const savedRequestedDocument = await newRequestedDocument.save();
 
         res.status(201).json({
             message: "Requested document added successfully",
-            data: savedRequestedDocument
+            data: savedRequestedDocument,
         });
     } catch (error) {
-        res.status(500).json({ message: error.message || "Failed to add requested document" });
+        res.status(500).json({
+            message: error.message || "Failed to add requested document",
+        });
     }
-};
+}
 
 async function getRequestCtrl(req, res) {
     try {
@@ -80,4 +86,9 @@ async function updateRequestStatusCtrl(req, res) {
     }
 }
 
-module.exports = { createRequestCtrl, getRequestCtrl, updateRequestStatusCtrl, createRequestedDocument };
+module.exports = {
+    createRequestCtrl,
+    getRequestCtrl,
+    updateRequestStatusCtrl,
+    createRequestedDocument,
+};

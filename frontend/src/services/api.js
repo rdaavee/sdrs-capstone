@@ -69,18 +69,31 @@ export const createRequest = async (formData) => {
     }
 };
 
-export const createRequestedDocument = async ({ referenceNumber, documentID }) => {
+export const createRequestedDocument = async ({
+    referenceNumber,
+    documentID,
+    documentFee,
+}) => {
     try {
-        const response = await fetch(`${BASE_API_URL}/request/create-requested-document`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ referenceNumber, documentID }),
-        });
+        const response = await fetch(
+            `${BASE_API_URL}/request/create-requested-document`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    referenceNumber,
+                    documentID,
+                    documentFee,
+                }),
+            }
+        );
 
         const result = await response.json();
 
         if (!response.ok) {
-            throw new Error(result.message || "Error adding document to request");
+            throw new Error(
+                result.message || "Error adding document to request"
+            );
         }
 
         return result;
@@ -88,7 +101,6 @@ export const createRequestedDocument = async ({ referenceNumber, documentID }) =
         throw new Error(error.message || "An error occurred. Please try again");
     }
 };
-
 
 //get requests
 export const fetchRequests = async () => {
@@ -127,11 +139,12 @@ export const fetchTrackerRequest = async (referenceNumber) => {
 export const fetchDocumentFees = async () => {
     try {
         const response = await axios.get(`${BASE_API_URL}/documents`);
-        return response.data;
+        return await response.data;
     } catch (error) {
         throw new Error(error.message || "Error fetching document fees.");
     }
 };
+
 
 //fetch api time
 export const fetchCurrentTime = async () => {

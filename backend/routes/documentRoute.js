@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const {
     getAllDocuments,
     getDocumentById,
@@ -8,6 +9,8 @@ const {
 } = require("../controllers/documentController");
 
 const router = express.Router();
+
+router.use(cors());
 
 router.get("/", getAllDocuments);
 router.get("/:id", getDocumentById);

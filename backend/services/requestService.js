@@ -1,4 +1,3 @@
-const { createRequestedDocument } = require("../controllers/requestController");
 const Request = require("../models/requestModel");
 
 async function createRequest(requestData) {
@@ -15,9 +14,8 @@ async function createRequest(requestData) {
         province,
         municipality,
         barangay,
-        sampleDocument,
+        selectedDocument,
         status,
-
     } = requestData;
 
     const createdRequest = new Request({
@@ -33,9 +31,8 @@ async function createRequest(requestData) {
         province,
         municipality,
         barangay,
-        sampleDocument,
+        selectedDocument,
         status,
-
     });
 
     const savedRequest = await createdRequest.save();

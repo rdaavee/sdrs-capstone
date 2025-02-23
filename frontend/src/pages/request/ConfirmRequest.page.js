@@ -9,12 +9,12 @@ import {
 } from "react-bootstrap";
 import "./ConfirmRequest.style.css";
 import useSubmitRequest from "../../hooks/useSubmitRequest";
+import { documents } from "../../constants/documents";
+import { useEffect } from "react";
 
 const ConfirmRequest = () => {
     const location = useLocation();
     const { ...formData } = location.state || {};
-
-    console.log(formData)
 
     const {
         handleSubmit,
@@ -26,6 +26,10 @@ const ConfirmRequest = () => {
         setShowToast,
         setShowErrorToast,
     } = useSubmitRequest(formData);
+
+    useEffect(() => {
+        console.log("Received formData in ConfirmRequest:", formData);
+    }, [formData]);
 
     return (
         <div style={{ color: "white", padding: "20px" }}>
@@ -123,11 +127,32 @@ const ConfirmRequest = () => {
                             <h4>Requested Documents</h4>
                             <div className="info-item">
                                 <strong>Document</strong>
-                                <span>{formData.sampleDocument}</span>
+                                <span>
+                                    {formData.selectedDocuments
+                                        .map((docId) => {
+                                            const doc = documents.find(
+                                                (d) => d.id === docId
+                                            );
+                                            return doc ? doc.name : "";
+                                        })
+                                        .filter(Boolean)
+                                        .join(", ")}
+                                </span>
                             </div>
                             <div className="info-item">
                                 <strong>Fee</strong>
-                                <span>₱{formData.documentFee || "N/A"}</span>
+                                <span>
+                                    ₱
+                                    {formData.selectedDocuments
+                                        .map((docId) => {
+                                            const doc = documents.find(
+                                                (d) => d.id === docId
+                                            );
+                                            return doc ? doc.fee : 0;
+                                        })
+                                        .reduce((total, fee) => total + fee, 0)
+                                        .toFixed(2)}
+                                </span>
                             </div>
                         </div>
                     </Col>
