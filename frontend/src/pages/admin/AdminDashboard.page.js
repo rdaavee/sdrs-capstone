@@ -165,7 +165,7 @@ const Dashboard = () => {
                                             {request.studentNumber}
                                         </td>
                                         <td className="p-4">
-                                            {request.sampleDocument}
+                                            {request.selectedDocuments}
                                         </td>
                                         <td className="p-4 contact">
                                             {request.email}
@@ -203,12 +203,6 @@ const Dashboard = () => {
                                                 </select>
                                             </div>
                                         </td>
-
-                                        {/* <td className="p-4">
-                                            <button className="text-blue-500 hover:underline">
-                                                Edit
-                                            </button>
-                                        </td> */}
                                     </tr>
                                 ))}
                             </tbody>

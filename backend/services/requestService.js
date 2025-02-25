@@ -1,55 +1,32 @@
 const Request = require("../models/requestModel");
 
 async function createRequest(requestData) {
-    const {
-        referenceNumber,
-        studentNumber,
-        firstName,
-        middleName,
-        lastName,
-        email,
-        mobileNumber,
-        course,
-        yearGraduated,
-        province,
-        municipality,
-        barangay,
-        selectedDocument,
-        status,
-    } = requestData;
-
-    const createdRequest = new Request({
-        referenceNumber,
-        studentNumber,
-        firstName,
-        middleName,
-        lastName,
-        email,
-        mobileNumber,
-        course,
-        yearGraduated,
-        province,
-        municipality,
-        barangay,
-        selectedDocument,
-        status,
-    });
-
-    const savedRequest = await createdRequest.save();
-    return savedRequest;
+    try {
+        const createdRequest = new Request(requestData);
+        return await createdRequest.save();
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }
 
 async function getRequest() {
-    const requests = await Request.find({});
-    return requests;
+    try {
+        return await Request.find({});
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }
 
 async function updateRequestStatus(requestId, status) {
-    return await Request.findByIdAndUpdate(
-        requestId,
-        { status },
-        { new: true }
-    );
+    try {
+        return await Request.findByIdAndUpdate(
+            requestId,
+            { status },
+            { new: true, runValidators: true }
+        );
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }
 
 module.exports = { createRequest, getRequest, updateRequestStatus };

@@ -23,8 +23,9 @@ const useSubmitRequest = (formData) => {
         setError("");
 
         try {
-            await createRequest(formData);
-            const referenceNumber = formData.referenceNumber;
+            const requestResponse = await createRequest(formData);
+            const referenceNumber = requestResponse.referenceNumber;
+
             if (referenceNumber) {
                 await Promise.all(
                     formData.selectedDocuments.map(async (documentID) => {
@@ -35,6 +36,7 @@ const useSubmitRequest = (formData) => {
                     })
                 );
             }
+
             setShowToast(true);
             setTimeout(() => navigate("/"), 1500);
         } catch (error) {

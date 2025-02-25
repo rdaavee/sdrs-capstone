@@ -55,10 +55,13 @@ export const createRequest = async (formData) => {
         const response = await fetch(`${BASE_API_URL}/request/create-request`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({
+                ...formData,
+                selectedDocuments: formData.selectedDocuments || [],
+            }),
         });
-        const result = await response.json();
 
+        const result = await response.json();
         if (!response.ok) {
             throw new Error(result.message || "Submit Request error");
         }
@@ -144,7 +147,6 @@ export const fetchDocumentFees = async () => {
         throw new Error(error.message || "Error fetching document fees.");
     }
 };
-
 
 //fetch api time
 export const fetchCurrentTime = async () => {
