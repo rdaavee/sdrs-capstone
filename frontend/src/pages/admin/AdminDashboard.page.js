@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../../layouts/partials/Sidebar.comp";
 import "./AdminDashboard.style.css";
-
+import { documents } from "../../constants/documents";
 import { io } from "socket.io-client";
 const socket = io("http://localhost:5000");
 
@@ -165,7 +165,15 @@ const Dashboard = () => {
                                             {request.studentNumber}
                                         </td>
                                         <td className="p-4">
-                                            {request.selectedDocuments}
+                                            {request.selectedDocuments
+                                                .map((docId) => {
+                                                    const doc = documents.find(
+                                                        (d) => d.id === docId
+                                                    );
+                                                    return doc ? doc.name : "";
+                                                })
+                                                .filter(Boolean)
+                                                .join(", ")}
                                         </td>
                                         <td className="p-4 contact">
                                             {request.email}

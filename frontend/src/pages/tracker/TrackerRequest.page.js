@@ -5,6 +5,7 @@ import { FaPaperPlane, FaSpinner, FaBoxOpen } from "react-icons/fa";
 import { io } from "socket.io-client";
 import axios from "axios";
 import "./TrackerRequest.style.css";
+import { documents } from "../../constants/documents";
 
 const socket = io("http://localhost:5000");
 
@@ -94,7 +95,17 @@ const TrackerRequest = () => {
                         <hr />
                         <p>
                             <strong>Requested Document</strong>
-                            <span>{requestData.sampleDocument}</span>
+                            <span>
+                                {requestData.selectedDocuments
+                                    .map((docId) => {
+                                        const doc = documents.find(
+                                            (d) => d.id === docId
+                                        );
+                                        return doc ? doc.name : "";
+                                    })
+                                    .filter(Boolean)
+                                    .join(", ")}
+                            </span>
                         </p>
                         <hr />
                         <p>
