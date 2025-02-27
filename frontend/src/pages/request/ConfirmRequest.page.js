@@ -10,11 +10,12 @@ import {
 import "./ConfirmRequest.style.css";
 import useSubmitRequest from "../../hooks/useSubmitRequest";
 import { documents } from "../../constants/documents";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 
 const ConfirmRequest = () => {
     const location = useLocation();
-    const { ...formData } = location.state || {};
+    const { ...formData } = location.state || { selectedDocuments: [] };
 
     const {
         handleSubmit,
@@ -27,12 +28,46 @@ const ConfirmRequest = () => {
         setShowErrorToast,
     } = useSubmitRequest(formData);
 
+    const handlePayment = async () => {
+        const stripe = await loadStripe(
+            "pk_test_51Qx2dgH6UOtWuvhFmqWmPwEh2SxteVBMSX6G8mVGc6s1eGFvnGCDI7K9rrKeeOG1QaNYmI48OKVPP0jEQVJvVhNE00kcwzxkCn"
+        );
+
+        const body = {
+            amount:
+                formData.selectedDocuments
+                    .map((docId) => {
+                        const doc = documents.find((d) => d.id === docId);
+                        return doc ? doc.fee : 0;
+                    })
+                    .reduce((total, fee) => total + fee, 0) * 100,
+            formData: formData,
+        };
+
+        const headers = { "Content-Type": "application/json" };
+
+        const response = await fetch(
+            "http://localhost:5000/payments/create-checkout-session",
+            {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify({
+                    ...body,
+                    referenceNumber: formData.referenceNumber,
+                }),
+            }
+        );
+
+        const session = await response.json();
+        await stripe.redirectToCheckout({ sessionId: session.id });
+    };
+
     useEffect(() => {
         console.log("Received formData in ConfirmRequest:", formData);
     }, [formData]);
 
     return (
-        <div style={{ color: "white", padding: "20px" }}>
+        <div style={{ padding: "20px" }}>
             <p className="header-text">
                 Please make sure you have provided correct information and
                 choose how many copies each document you'd like to have. <br />
@@ -86,6 +121,7 @@ const ConfirmRequest = () => {
                                 <strong>Reference Number</strong>
                                 <span>{formData.referenceNumber}</span>
                             </div>
+                            <hr />
                             <div className="info-item">
                                 <strong>Name</strong>
                                 <span>
@@ -93,26 +129,27 @@ const ConfirmRequest = () => {
                                     {formData.lastName}
                                 </span>
                             </div>
+                            <hr />
                             <div className="info-item">
                                 <strong>Email</strong>
                                 <span>{formData.email}</span>
                             </div>
+                            <hr />
                             <div className="info-item">
                                 <strong>Student Number</strong>
                                 <span>{formData.studentNumber}</span>
                             </div>
+                            <hr />
                             <div className="info-item">
                                 <strong>Contact Number</strong>
                                 <span>{formData.mobileNumber}</span>
                             </div>
+                            <hr />
                             <div className="info-item">
                                 <strong>Course</strong>
                                 <span>{formData.course}</span>
                             </div>
-                            <div className="info-item">
-                                <strong>Year Graduated</strong>
-                                <span>{formData.yearGraduated || "N/A"}</span>
-                            </div>
+                            <hr />
                             <div className="info-item">
                                 <strong>Location</strong>
                                 <span>
@@ -120,6 +157,7 @@ const ConfirmRequest = () => {
                                     , {formData.province}
                                 </span>
                             </div>
+                            <hr />
                         </div>
                     </Col>
                     <Col md={6}>
@@ -139,6 +177,8 @@ const ConfirmRequest = () => {
                                         .join(", ")}
                                 </span>
                             </div>
+                            <hr />
+
                             <div className="info-item">
                                 <strong>Fee</strong>
                                 <span>
@@ -154,6 +194,7 @@ const ConfirmRequest = () => {
                                         .toFixed(2)}
                                 </span>
                             </div>
+                            <hr />
                         </div>
                     </Col>
                 </Row>
@@ -167,6 +208,13 @@ const ConfirmRequest = () => {
                         disabled={loading}
                     >
                         {loading ? "Submitting..." : "Submit Request"}
+                    </Button>
+                    <Button
+                        className="submit-request"
+                        onClick={handlePayment}
+                        disabled={loading}
+                    >
+                        {loading ? "Loading..." : "Pay Now"}
                     </Button>
                 </div>
             </Container>

@@ -29,4 +29,18 @@ async function updateRequestStatus(requestId, status) {
     }
 }
 
-module.exports = { createRequest, getRequest, updateRequestStatus };
+// ✅ **Add this missing function**
+async function deleteRequest(requestId) {
+    try {
+        return await Request.findByIdAndDelete(requestId);
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+module.exports = {
+    createRequest,
+    getRequest,
+    updateRequestStatus,
+    deleteRequest,
+};

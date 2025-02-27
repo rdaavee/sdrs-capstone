@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ToastContainer, Toast, Nav, Dropdown, Col } from "react-bootstrap";
-import axios from "axios";
 
 import useLocationData from "../../hooks/useLocationData";
 import useAuth from "../../hooks/useAuth";
@@ -19,6 +18,7 @@ const EntryPage = () => {
     const [loading, setLoading] = useState(true);
     const [sendRequest, setRequest] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const [showWarningToast, setShowWarningToast] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -26,9 +26,20 @@ const EntryPage = () => {
     const { isOpen } = useOfficeHours();
 
     const [documentFees, setDocumentFees] = useState({});
-    const [selectedFee, setSelectedFee] = useState(0);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (showPrivacyModal || showModal) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [showPrivacyModal, showModal]);
 
     const handleLoginButton = (e) => {
         e.preventDefault();
@@ -106,7 +117,6 @@ const EntryPage = () => {
     useEffect(() => {
         fetchDocumentFees()
             .then((data) => {
-                console.log("Fetched document fees:", data); // Check what is returned
                 const fees = data.reduce((acc, doc) => {
                     acc[doc.documentID] = doc.fee;
                     return acc;
@@ -173,7 +183,7 @@ const EntryPage = () => {
                 state: { ...formData, documentFee: formData.documentFee || 0 },
             });
         }
-    }, [sendRequest]);
+    }, [formData, navigate, sendRequest]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -297,32 +307,94 @@ const EntryPage = () => {
                     </button>
                 ))}
                 {isOpen && (
-                    <button
-                        className="request-button ms-auto me-3 d-none d-md-block"
-                        onClick={() => {
-                            if (!isLoggedIn) {
-                                setShowWarningToast(true);
-                                return;
-                            }
-                            setShowModal(true);
-                        }}
-                    >
-                        Request a Document
-                    </button>
+                    <>
+                        <button
+                            className="request-button ms-auto me-3 d-none d-md-block"
+                            onClick={() => {
+                                if (!isLoggedIn) {
+                                    setShowWarningToast(true);
+                                    return;
+                                }
+                                setShowPrivacyModal(true);
+                            }}
+                        >
+                            Request a Document
+                        </button>
+
+                        <button
+                            className="request-button ms-auto me-3 d-block d-md-none"
+                            onClick={() => {
+                                if (!isLoggedIn) {
+                                    setShowWarningToast(true);
+                                    return;
+                                }
+                                setShowPrivacyModal(true);
+                            }}
+                        >
+                            <AiOutlineFileAdd size={20} />
+                        </button>
+                    </>
                 )}
-                {isOpen && (
-                    <button
-                        className="request-button ms-auto me-3 d-block d-md-none"
-                        onClick={() => {
-                            if (!isLoggedIn) {
-                                setShowWarningToast(true);
-                                return;
-                            }
-                            setShowModal(true);
-                        }}
+
+                {showPrivacyModal && (
+                    <div
+                        className="modal-overlay"
+                        onClick={() => setShowPrivacyModal(false)}
                     >
-                        <AiOutlineFileAdd size={20} />
-                    </button>
+                        <div
+                            className="modal-content"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                className="close-button"
+                                onClick={() => setShowPrivacyModal(false)}
+                                style={{
+                                    position: "absolute",
+                                    top: "10px",
+                                    right: "10px",
+                                    border: "none",
+                                    background: "none",
+                                    fontSize: "20px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                ✕
+                            </button>
+
+                            <h3>Privacy Notice</h3>
+                            <hr />
+                            <p>
+                                PHINMA - University of Pangasinan is committed
+                                to complying with the mandates of the National
+                                Privacy Commission and adhering to the Rules and
+                                Regulations of the Data Privacy Act of 2012 (RA
+                                10173). The personal information collected
+                                through this form will be used solely for
+                                processing your document request and generating
+                                reports. By proceeding, I acknowledge that I
+                                have read and understood the statements above
+                                and consent to the processing of my personal
+                                information.
+                            </p>
+                            <hr />
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "flex-end",
+                                }}
+                            >
+                                <button
+                                    className="btn btn-agreement"
+                                    onClick={() => {
+                                        setShowPrivacyModal(false);
+                                        setShowModal(true);
+                                    }}
+                                >
+                                    Agree & Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 )}
             </div>
 
@@ -427,12 +499,11 @@ const EntryPage = () => {
                 )}
             </div>
 
-            {/* <Footer /> */}
-
             {/* MODAL */}
+
             {showModal && (
                 <div
-                    className="modal-overlay"
+                    className="modal-overlay slide-down"
                     onClick={() => setShowModal(false)}
                 >
                     <div
@@ -445,9 +516,7 @@ const EntryPage = () => {
                         >
                             ✕
                         </button>
-                        <h5 style={{ fontWeight: "bold", color: "white" }}>
-                            Fill out Form
-                        </h5>
+                        <h5 style={{ fontWeight: "bold" }}>Fill out Form</h5>
                         <hr />
                         <div className="form-container">
                             {/* Personal Information Section */}
@@ -456,7 +525,6 @@ const EntryPage = () => {
                                     style={{
                                         marginBottom: "30px",
                                         fontWeight: "bold",
-                                        color: "white",
                                     }}
                                 >
                                     Personal Information
@@ -649,11 +717,11 @@ const EntryPage = () => {
                             <div className="row mt-3">
                                 <Col>
                                     <div className="border p-3">
-                                        <h3 className="text-white fw-bold text-start mb-3">
+                                        <h3 className="fw-bold text-start mb-3">
                                             Request for Records
                                         </h3>
                                         <div className="form-field">
-                                            <h5 className="text-white text-start">
+                                            <h5 className="text-start">
                                                 Transcripts of Records
                                             </h5>
                                             {[
@@ -678,7 +746,7 @@ const EntryPage = () => {
                                                         }
                                                     />
                                                     <label
-                                                        className="form-check-label"
+                                                        className="form-check-label ms-3 mt-2"
                                                         htmlFor={docID}
                                                     >
                                                         {`TOR (${
@@ -717,7 +785,7 @@ const EntryPage = () => {
                                                         }
                                                     />
                                                     <label
-                                                        className="form-check-label"
+                                                        className="form-check-label ms-3 mt-2"
                                                         htmlFor={docID}
                                                     >
                                                         {`OTR (${
@@ -778,7 +846,7 @@ const EntryPage = () => {
                                 {/* Request for Certification */}
                                 <Col>
                                     <div className="border p-3">
-                                        <h3 className="text-white fw-bold text-start mb-3">
+                                        <h3 className="fw-bold text-start mb-3">
                                             Request for Certification
                                         </h3>
                                         <div className="form-field">
@@ -810,7 +878,7 @@ const EntryPage = () => {
                                                         }
                                                     />
                                                     <label
-                                                        className="form-check-label"
+                                                        className="form-check-label ms-3 mt-2"
                                                         htmlFor={docID}
                                                     >
                                                         {docID
@@ -851,7 +919,7 @@ const EntryPage = () => {
                                                             }
                                                         />
                                                         <label
-                                                            className="form-check-label"
+                                                            className="form-check-label ms-3 mt-2"
                                                             htmlFor="firstCopy"
                                                         >
                                                             1st Copy

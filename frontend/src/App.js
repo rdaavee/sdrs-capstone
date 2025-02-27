@@ -8,6 +8,8 @@ import { AuthProvider } from "./utils/authContext";
 import ConfirmRequest from "./pages/request/ConfirmRequest.page";
 import AdminDashboard from "./pages/admin/AdminDashboard.page";
 import TrackerRequest from "./pages/tracker/TrackerRequest.page";
+import PaymentSuccess from "./layouts/partials/PaymentSuccess.comp";
+import PaymentCancel from "./layouts/partials/PaymentCancel.comp";
 
 function App() {
     return (
@@ -29,6 +31,16 @@ function App() {
                         <Route
                             path="/confirm-request"
                             element={<ConfirmRequest />}
+                        />
+
+                        <Route
+                            path="/payment-success"
+                            element={<PaymentSuccess />}
+                        />
+
+                        <Route
+                            path="/payment-cancel"
+                            element={<PaymentCancel />}
                         />
 
                         <Route element={<DefaultLayout />}>

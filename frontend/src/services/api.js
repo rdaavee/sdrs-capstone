@@ -200,3 +200,35 @@ export const fetchBarangays = async (municipalityCode) => {
         return [];
     }
 };
+
+export const createInvoice = async (amount, customerEmail) => {
+    try {
+        if (!amount || isNaN(amount) || !customerEmail) {
+            console.error("Invalid input data:", { amount, customerEmail });
+            return {
+                success: false,
+                message: "Invalid amount or customer email.",
+            };
+        }
+
+        console.log("Sending data:", { amount, customerEmail });
+
+        const response = await axios.post(
+            "http://localhost:5000/payments/create-invoice",
+            { amount, customerEmail },
+            { headers: { "Content-Type": "application/json" } }
+        );
+        console.log("Invoice Created:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error(
+            "Error creating invoice:",
+            error.response?.data || error.message
+        );
+        return {
+            success: false,
+            message:
+                error.response?.data?.message || "Failed to create invoice.",
+        };
+    }
+};

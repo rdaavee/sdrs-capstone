@@ -21,6 +21,7 @@ const requestSchema = new mongoose.Schema(
         requestedDocumentsID: { type: String },
         selectedDocuments: { type: [String], default: [] },
         status: { type: String, default: "Pending" },
+        documentFeeStatus: { type: String, default: "Unpaid" },
         date: { type: Date, default: Date.now },
     },
     { timestamps: true }

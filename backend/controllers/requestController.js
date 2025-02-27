@@ -1,5 +1,6 @@
 const requestService = require("../services/requestService");
 const documentModel = require("../models/ticketModel");
+const Request = require("../models/requestModel");
 const { getIO } = require("../socket");
 
 async function createRequestCtrl(req, res) {
@@ -22,7 +23,6 @@ async function createRequestCtrl(req, res) {
 async function createRequestedDocument(req, res) {
     try {
         const { referenceNumber, documentID, documentFee } = req.body;
-        console.log(req.body);
 
         if (!referenceNumber || !documentID) {
             return res.status(400).json({ message: "Missing required fields" });
@@ -31,7 +31,7 @@ async function createRequestedDocument(req, res) {
         const newRequestedDocument = new documentModel({
             referenceNumber,
             documentID,
-            documentFee
+            documentFee,
         });
         const savedRequestedDocument = await newRequestedDocument.save();
 
@@ -40,6 +40,7 @@ async function createRequestedDocument(req, res) {
             data: savedRequestedDocument,
         });
     } catch (error) {
+        console.error("Error adding requested document:", error);
         res.status(500).json({
             message: error.message || "Failed to add requested document",
         });
@@ -86,9 +87,65 @@ async function updateRequestStatusCtrl(req, res) {
     }
 }
 
+async function deleteRequestCtrl(req, res) {
+    try {
+        const { id } = req.params;
+        const deletedRequest = await requestService.deleteRequest(id);
+
+        if (!deletedRequest) {
+            return res.status(404).json({ message: "Request not found" });
+        }
+
+        getIO().emit("requestDeleted", { id });
+
+        res.json({
+            message: "Request deleted successfully",
+        });
+    } catch (error) {
+        console.error("Error deleting request:", error);
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message,
+        });
+    }
+}
+
+const updateRequestStatus = async (req, res) => {
+    const { referenceNumber } = req.body;
+
+    if (!referenceNumber) {
+        return res.status(400).json({ error: "Missing reference number" });
+    }
+
+    try {
+        console.log(
+            `Received request to update status for reference: ${referenceNumber}`
+        );
+
+        const request = await Request.findOneAndUpdate(
+            { referenceNumber },
+            { $set: { documentFee: "Paid" } },
+            { new: true }
+        );
+
+        if (!request) {
+            console.error("Request not found in the database.");
+            return res.status(404).json({ error: "Request not found" });
+        }
+
+        console.log(`Successfully updated request ${referenceNumber}`);
+        res.status(200).json({ success: true, request });
+    } catch (error) {
+        console.error("Error updating request:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     createRequestCtrl,
     getRequestCtrl,
+    updateRequestStatus,
     updateRequestStatusCtrl,
     createRequestedDocument,
+    deleteRequestCtrl,
 };

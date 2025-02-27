@@ -308,11 +308,10 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    color: white;
 }
 
 .modal-content {
-    background: #1e1e1e;
+    background: #fefefe;
     padding: 20px;
     border-radius: 10px;
     width: 900px;
@@ -320,6 +319,18 @@ body {
     max-height: 90%;
     overflow-y: auto;
     position: relative;
+    animation: slideDown 0.3s forwards ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .form-group {
@@ -331,7 +342,6 @@ body {
 label {
     font-weight: bold;
     margin-bottom: 3px;
-    color: #fff;
 }
 
 input {
@@ -343,10 +353,10 @@ input {
 
 input,
 select {
-    padding: 8px;
+    padding: 12px;
     border: 1px solid #444;
-    background: #333;
-    color: white;
+    background: #eee;
+    border-radius: 5px;
     width: 100%;
 }
 
@@ -373,6 +383,23 @@ select {
     background-color: #218838;
 }
 
+.btn-agreement {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-agreement:hover {
+    background-color: #218838;
+    color: white;
+}
+
 .close-button {
     position: absolute;
     right: 10px;
@@ -382,7 +409,7 @@ select {
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: #fff;
+    color: #000;
 }
 
 .form-container h3 {
@@ -408,7 +435,6 @@ select {
 label {
     font-weight: bold;
     margin-bottom: 5px;
-    color: #fff;
 }
 
 @media (max-width: 1024px) {

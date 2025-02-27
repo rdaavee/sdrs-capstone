@@ -8,6 +8,7 @@ const userRoute = require("./routes/userRoute");
 const requestRoute = require("./routes/requestRoute");
 const trackerRoute = require("./routes/trackerRoute");
 const documentRoute = require("./routes/documentRoute");
+const paymentRoute = require("./routes/paymentRoute");
 
 const app = express();
 const server = http.createServer(app);
@@ -25,8 +26,11 @@ app.use(cors());
 app.use("/auth", authRoute);
 app.use("/api", userRoute);
 app.use("/request", requestRoute);
+app.use("/requests", requestRoute);
 app.use("/tracker", trackerRoute);
 app.use("/documents", documentRoute);
+app.use("/payments", paymentRoute);
+// app.use("/requests", paymentRoute);
 
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

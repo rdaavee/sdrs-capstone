@@ -3,6 +3,7 @@ import Sidebar from "../../layouts/partials/Sidebar.comp";
 import "./AdminDashboard.style.css";
 import { documents } from "../../constants/documents";
 import { io } from "socket.io-client";
+import trashIcon from "../../assets/icons/trash-xmark.svg";
 const socket = io("http://localhost:5000");
 
 const Dashboard = () => {
@@ -91,19 +92,53 @@ const Dashboard = () => {
         }
     };
 
-    // Handle search filtering
-    const filteredRequests = requests.filter(
-        (request) =>
-            request.studentNumber
-                ?.toLowerCase()
-                .includes(searchTerm.toLowerCase()) ||
-            request.sampleDocument
-                ?.toLowerCase()
-                .includes(searchTerm.toLowerCase()) ||
-            request.email?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this request?")) {
+            return;
+        }
 
-    // Pagination logic
+        try {
+            const response = await fetch(
+                `http://localhost:5000/request/delete/${id}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Failed to delete request");
+            }
+
+            setRequests((prevRequests) =>
+                prevRequests.filter((request) => request._id !== id)
+            );
+
+            console.log("Request deleted successfully!");
+        } catch (error) {
+            console.error("Error deleting request:", error);
+        }
+    };
+
+    const filteredRequests = requests.filter((request) => {
+        const search = searchTerm.toLowerCase();
+
+        return (
+            request.referenceNumber?.toLowerCase().includes(search) ||
+            request.firstName?.toLowerCase().includes(search) ||
+            request.middleName?.toLowerCase().includes(search) ||
+            request.lastName?.toLowerCase().includes(search) ||
+            request.studentNumber?.toLowerCase().includes(search) ||
+            request.email?.toLowerCase().includes(search) ||
+            request.mobileNumber?.toLowerCase().includes(search) ||
+            request.selectedDocuments
+                .map((docId) => {
+                    const doc = documents.find((d) => d.id === docId);
+                    return doc ? doc.name.toLowerCase() : "";
+                })
+                .some((docName) => docName.includes(search))
+        );
+    });
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentRequests = filteredRequests.slice(
@@ -147,9 +182,9 @@ const Dashboard = () => {
                                     <th className="p-4 text-left font-semibold">
                                         Status
                                     </th>
-                                    {/* <th className="p-4 text-left font-semibold">
+                                    <th className="p-4 text-left font-semibold">
                                         Actions
-                                    </th> */}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -211,12 +246,23 @@ const Dashboard = () => {
                                                 </select>
                                             </div>
                                         </td>
+                                        <td className="action-cell">
+                                            <img
+                                                src={trashIcon}
+                                                width={20}
+                                                height={20}
+                                                alt="Delete"
+                                                onClick={() =>
+                                                    handleDelete(request._id)
+                                                }
+                                                className="trash-icon"
+                                            />
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
 
-                        {/* Pagination Controls */}
                         <div className="pagination-container">
                             {Array.from({ length: totalPages }, (_, index) => (
                                 <button
