@@ -90,6 +90,11 @@
     border-left: 1px solid #d3d3d3;
 }
 
+.submit-request {
+    display: flex;
+    justify-content: flex-end;
+}
+
 @media (max-width: 768px) {
     .circle {
         width: 40px;

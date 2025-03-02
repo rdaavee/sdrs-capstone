@@ -26,7 +26,6 @@ app.use(cors());
 app.use("/auth", authRoute);
 app.use("/api", userRoute);
 app.use("/request", requestRoute);
-app.use("/requests", requestRoute);
 app.use("/tracker", trackerRoute);
 app.use("/documents", documentRoute);
 app.use("/payments", paymentRoute);

@@ -110,8 +110,8 @@ async function deleteRequestCtrl(req, res) {
     }
 }
 
-const updateRequestStatus = async (req, res) => {
-    const { referenceNumber } = req.body;
+async function updatePaymentStatusCtrl(req, res) {
+    const { referenceNumber, paid } = req.body;
 
     if (!referenceNumber) {
         return res.status(400).json({ error: "Missing reference number" });
@@ -119,24 +119,67 @@ const updateRequestStatus = async (req, res) => {
 
     try {
         console.log(
-            `Received request to update status for reference: ${referenceNumber}`
+            `Updating payment status for reference: ${referenceNumber}`
         );
 
-        const request = await Request.findOneAndUpdate(
-            { referenceNumber },
-            { $set: { documentFee: "Paid" } },
-            { new: true }
-        );
+        const request = await Request.findOne({ referenceNumber });
 
         if (!request) {
-            console.error("Request not found in the database.");
-            return res.status(404).json({ error: "Request not found" });
+            console.error("Request record not found in the database.");
+            return res.status(404).json({ error: "Request record not found" });
         }
 
-        console.log(`Successfully updated request ${referenceNumber}`);
-        res.status(200).json({ success: true, request });
+        if (paid) {
+            request.documentFeeStatus = "Paid";
+        } else {
+            request.documentFeeStatus = "Unpaid";
+        }
+
+        await request.save();
+
+        console.log(
+            `Successfully updated payment status for ${referenceNumber}`
+        );
+        res.status(200).json({
+            success: true,
+            message: "Payment status updated successfully",
+            request,
+        });
+
+        getIO().emit("paymentUpdated", { referenceNumber, paid });
     } catch (error) {
-        console.error("Error updating request:", error);
+        console.error("Error updating payment status:", error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
+const getRequestStatusCtrl = async (req, res) => {
+    const { referenceNumber } = req.params;
+
+    if (!referenceNumber) {
+        return res.status(400).json({ error: "Missing reference number" });
+    }
+
+    try {
+        console.log(
+            `Fetching payment status for reference: ${referenceNumber}`
+        );
+
+        const request = await Request.findOne({ referenceNumber });
+
+        if (!request) {
+            console.error("Request record not found in the database.");
+            return res.status(404).json({ error: "Request record not found" });
+        }
+
+        // Determine payment status
+        const isPaid = request.documentFeeStatus === "Paid";
+
+        console.log(`Payment status for ${referenceNumber}: ${isPaid}`);
+
+        res.status(200).json({ paid: isPaid });
+    } catch (error) {
+        console.error("Error fetching payment status:", error);
         res.status(500).json({ error: error.message });
     }
 };
@@ -144,8 +187,9 @@ const updateRequestStatus = async (req, res) => {
 module.exports = {
     createRequestCtrl,
     getRequestCtrl,
-    updateRequestStatus,
+    updatePaymentStatusCtrl,
     updateRequestStatusCtrl,
     createRequestedDocument,
     deleteRequestCtrl,
+    getRequestStatusCtrl,
 };

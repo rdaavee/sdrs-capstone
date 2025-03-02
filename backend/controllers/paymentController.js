@@ -1,4 +1,5 @@
 const Request = require("../models/requestModel");
+const Payment = require("../models/paymentModel");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.createCheckoutSession = async (req, res) => {
@@ -9,16 +10,32 @@ exports.createCheckoutSession = async (req, res) => {
             return res.status(400).json({ error: "Invalid payment amount" });
         }
 
+        // Ensure amount is an integer (in cents)
+        const totalAmount = Math.round(amount);
+
+        // Validate documents
+        if (
+            !formData.selectedDocuments ||
+            formData.selectedDocuments.length === 0
+        ) {
+            return res.status(400).json({ error: "No documents selected" });
+        }
+
+        // Calculate per-document fee (ensure it's an integer)
+        const perDocumentAmount = Math.round(
+            totalAmount / formData.selectedDocuments.length
+        );
+
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             line_items: formData.selectedDocuments.map((doc) => ({
                 price_data: {
                     currency: "php",
                     product_data: {
-                        name: doc,
+                        name: doc || "Document Request", // Ensure a valid name
                         description: `Requested by ${formData.firstName} ${formData.lastName}`,
                     },
-                    unit_amount: amount / formData.selectedDocuments.length,
+                    unit_amount: perDocumentAmount, // Ensure this is an integer
                 },
                 quantity: 1,
             })),
@@ -34,7 +51,10 @@ exports.createCheckoutSession = async (req, res) => {
         res.json({ id: session.id });
     } catch (error) {
         console.error("Stripe error:", error);
-        res.status(500).json({ error: "Something went wrong" });
+        res.status(500).json({
+            error: "Something went wrong",
+            details: error.message,
+        });
     }
 };
 

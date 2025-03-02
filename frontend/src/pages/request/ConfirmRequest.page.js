@@ -15,7 +15,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 const ConfirmRequest = () => {
     const location = useLocation();
-    const { ...formData } = location.state || { selectedDocuments: [] };
+    const { ...formData } = location.state || {};
 
     const {
         handleSubmit,
@@ -28,39 +28,52 @@ const ConfirmRequest = () => {
         setShowErrorToast,
     } = useSubmitRequest(formData);
 
-    const handlePayment = async () => {
-        const stripe = await loadStripe(
-            "pk_test_51Qx2dgH6UOtWuvhFmqWmPwEh2SxteVBMSX6G8mVGc6s1eGFvnGCDI7K9rrKeeOG1QaNYmI48OKVPP0jEQVJvVhNE00kcwzxkCn"
-        );
+    // const handlePayment = async () => {
+    //     const stripe = await loadStripe(
+    //         "pk_test_51Qx2dgH6UOtWuvhFmqWmPwEh2SxteVBMSX6G8mVGc6s1eGFvnGCDI7K9rrKeeOG1QaNYmI48OKVPP0jEQVJvVhNE00kcwzxkCn"
+    //     );
 
-        const body = {
-            amount:
-                formData.selectedDocuments
-                    .map((docId) => {
-                        const doc = documents.find((d) => d.id === docId);
-                        return doc ? doc.fee : 0;
-                    })
-                    .reduce((total, fee) => total + fee, 0) * 100,
-            formData: formData,
-        };
+    //     const body = {
+    //         amount: Math.round(
+    //             formData.selectedDocuments
+    //                 .map((docId) => {
+    //                     const doc = documents.find((d) => d.id === docId);
+    //                     return doc ? doc.fee : 0;
+    //                 })
+    //                 .reduce((total, fee) => total + fee, 0) * 100
+    //         ),
+    //         formData: formData,
+    //     };
 
-        const headers = { "Content-Type": "application/json" };
+    //     const headers = { "Content-Type": "application/json" };
 
-        const response = await fetch(
-            "http://localhost:5000/payments/create-checkout-session",
-            {
-                method: "POST",
-                headers: headers,
-                body: JSON.stringify({
-                    ...body,
-                    referenceNumber: formData.referenceNumber,
-                }),
-            }
-        );
+    //     try {
+    //         const response = await fetch(
+    //             "http://localhost:5000/payments/create-checkout-session",
+    //             {
+    //                 method: "POST",
+    //                 headers: headers,
+    //                 body: JSON.stringify(body),
+    //             }
+    //         );
 
-        const session = await response.json();
-        await stripe.redirectToCheckout({ sessionId: session.id });
-    };
+    //         const session = await response.json();
+
+    //         const result = await stripe.redirectToCheckout({
+    //             sessionId: session.id,
+    //         });
+
+    //         if (result.error) {
+    //             console.error("Payment error:", result.error.message);
+    //             setShowErrorToast(true);
+    //         } else {
+    //             setShowToast(true);
+    //         }
+    //     } catch (error) {
+    //         console.error("Payment request failed:", error);
+    //         setShowErrorToast(true);
+    //     }
+    // };
 
     useEffect(() => {
         console.log("Received formData in ConfirmRequest:", formData);
@@ -209,13 +222,13 @@ const ConfirmRequest = () => {
                     >
                         {loading ? "Submitting..." : "Submit Request"}
                     </Button>
-                    <Button
+                    {/* <Button
                         className="submit-request"
                         onClick={handlePayment}
                         disabled={loading}
                     >
                         {loading ? "Loading..." : "Pay Now"}
-                    </Button>
+                    </Button> */}
                 </div>
             </Container>
         </div>
