@@ -1,4 +1,5 @@
 const { Server } = require("socket.io");
+const Request = require("./models/requestModel");
 
 let io; // declaring io globally
 
@@ -13,8 +14,16 @@ function initializeSocket(server) {
     io.on("connection", (socket) => {
         console.log("A user connected:", socket.id);
 
-        socket.on("disconnect", () => {
-            console.log("User disconnected:", socket.id);
+        socket.on("newRequest", async () => {
+            try {
+                const requests = await Request.find().sort({ createdAt: -1 }); // Fetch latest requests
+                const requestCount = requests.length; // Get updated count
+
+                io.emit("updateRequests", requests);
+                io.emit("updateRequestCount", requestCount);
+            } catch (error) {
+                console.error("Error fetching requests:", error);
+            }
         });
     });
 }

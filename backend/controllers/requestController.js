@@ -7,6 +7,13 @@ async function createRequestCtrl(req, res) {
     try {
         const requestData = req.body;
         const newRequest = await requestService.createRequest(requestData);
+
+        const requests = await Request.find().sort({ createdAt: -1 });
+        const requestCount = requests.length;
+
+        getIO().emit("updateRequests", requests);
+        getIO().emit("updateRequestCount", requestCount);
+
         res.status(201).json({
             request: newRequest,
             message: "Request created successfully",
@@ -33,6 +40,7 @@ async function createRequestedDocument(req, res) {
             documentID,
             documentFee,
         });
+
         const savedRequestedDocument = await newRequestedDocument.save();
 
         res.status(201).json({
@@ -98,6 +106,9 @@ async function deleteRequestCtrl(req, res) {
 
         getIO().emit("requestDeleted", { id });
 
+        const requestCount = await Request.countDocuments();
+        getIO().emit("updateRequestCount", requestCount);
+
         res.json({
             message: "Request deleted successfully",
         });
@@ -129,24 +140,20 @@ async function updatePaymentStatusCtrl(req, res) {
             return res.status(404).json({ error: "Request record not found" });
         }
 
-        if (paid) {
-            request.documentFeeStatus = "Paid";
-        } else {
-            request.documentFeeStatus = "Unpaid";
-        }
-
+        request.documentFeeStatus = paid ? "Paid" : "Unpaid";
         await request.save();
 
         console.log(
             `Successfully updated payment status for ${referenceNumber}`
         );
+
+        getIO().emit("paymentUpdated", { referenceNumber, paid });
+
         res.status(200).json({
             success: true,
             message: "Payment status updated successfully",
             request,
         });
-
-        getIO().emit("paymentUpdated", { referenceNumber, paid });
     } catch (error) {
         console.error("Error updating payment status:", error);
         res.status(500).json({ error: error.message });
@@ -172,7 +179,6 @@ const getRequestStatusCtrl = async (req, res) => {
             return res.status(404).json({ error: "Request record not found" });
         }
 
-        // Determine payment status
         const isPaid = request.documentFeeStatus === "Paid";
 
         console.log(`Payment status for ${referenceNumber}: ${isPaid}`);
