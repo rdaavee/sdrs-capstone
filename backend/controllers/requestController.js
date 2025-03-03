@@ -98,13 +98,20 @@ async function updateRequestStatusCtrl(req, res) {
 async function deleteRequestCtrl(req, res) {
     try {
         const { id } = req.params;
-        const deletedRequest = await requestService.deleteRequest(id);
 
+        const requestToDelete = await Request.findById(id);
+        if (!requestToDelete) {
+            return res.status(404).json({ message: "Request not found" });
+        }
+
+        const status = requestToDelete.status;
+
+        const deletedRequest = await requestService.deleteRequest(id);
         if (!deletedRequest) {
             return res.status(404).json({ message: "Request not found" });
         }
 
-        getIO().emit("requestDeleted", { id });
+        getIO().emit("requestDeleted", { id, status });
 
         const requestCount = await Request.countDocuments();
         getIO().emit("updateRequestCount", requestCount);

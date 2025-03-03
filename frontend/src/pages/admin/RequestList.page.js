@@ -75,6 +75,8 @@ const RequestList = () => {
                 throw new Error("Failed to update status");
             }
 
+            socket.emit("requestUpdated", { id, newStatus });
+
             setRequests((prevRequests) =>
                 prevRequests.map((request) =>
                     request._id === id

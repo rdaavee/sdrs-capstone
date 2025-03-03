@@ -10,6 +10,13 @@ const socket = io("http://localhost:5000");
 
 const Dashboard = () => {
     const [requestsCount, setRequestsCount] = useState(0);
+
+    const [sentRequestsCount, setSentRequestsCount] = useState(0);
+    const [processingRequestsCount, setProcessingRequestsCount] = useState(0);
+    const [pickUpRequestsCount, setPickUpRequestsCount] = useState(0);
+    const [completedRequestsCount, setCompletedRequestsCount] = useState(0);
+
+    const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -22,7 +29,6 @@ const Dashboard = () => {
                 (prevSlide) => (prevSlide + 1) % sliderImages.length
             );
         }, autoSlideInterval);
-
         return () => clearInterval(interval);
     }, [sliderImages.length]);
 
@@ -33,14 +39,10 @@ const Dashboard = () => {
                     "http://localhost:5000/request/requests"
                 );
                 const data = await response.json();
-                console.log("Requests:", data);
-
                 if (Array.isArray(data)) {
+                    setRequests(data);
                     setRequestsCount(data.length);
-                } else if (data.count !== undefined) {
-                    setRequestsCount(data.count);
-                } else {
-                    console.error("Unexpected response format:", data);
+                    updateRequestCounts(data);
                 }
             } catch (error) {
                 console.error("Error fetching requests:", error);
@@ -48,83 +50,144 @@ const Dashboard = () => {
                 setLoading(false);
             }
         };
-
         fetchRequests();
     }, []);
 
+    const updateRequestCounts = (requests) => {
+        setSentRequestsCount(
+            requests.filter((req) => req.status === "Request Sent").length
+        );
+        setProcessingRequestsCount(
+            requests.filter((req) => req.status === "Processing").length
+        );
+        setPickUpRequestsCount(
+            requests.filter((req) => req.status === "Pick Up").length
+        );
+        setCompletedRequestsCount(
+            requests.filter((req) => req.status === "Completed").length
+        );
+    };
+
     useEffect(() => {
-        socket.on("updateRequestCount", (count) => setRequestsCount(count));
-        socket.on("requestCreated", (newRequest) =>
-            console.log("New Request:", newRequest)
-        );
-        socket.on("requestUpdated", (updatedRequest) =>
-            console.log("Updated Request:", updatedRequest)
-        );
-        socket.on("requestDeleted", ({ id }) =>
-            console.log("Request Deleted:", id)
-        );
-        socket.on("paymentUpdated", ({ referenceNumber, paid }) =>
-            console.log(`Payment updated for ${referenceNumber}: ${paid}`)
-        );
+        const handleUpdateRequestCount = (count) => setRequestsCount(count);
+
+        const handleRequestCreated = (newRequest) => {
+            setRequests((prevRequests) => {
+                const updatedRequests = [...prevRequests, newRequest];
+                updateRequestCounts(updatedRequests);
+                return updatedRequests;
+            });
+        };
+
+        const handleRequestUpdated = (updatedRequest) => {
+            setRequests((prevRequests) => {
+                const updatedRequests = prevRequests.map((req) =>
+                    req.id === updatedRequest.id ? updatedRequest : req
+                );
+                updateRequestCounts(updatedRequests);
+                return updatedRequests;
+            });
+        };
+
+        const handleUpdateRequests = (updatedRequests) => {
+            setRequests(updatedRequests);
+            setRequestsCount(updatedRequests.length);
+            updateRequestCounts(updatedRequests);
+        };
+
+        const handleRequestDeleted = ({ id }) => {
+            setRequests((prevRequests) => {
+                const updatedRequests = prevRequests.filter(
+                    (req) => req.id !== id
+                );
+                updateRequestCounts(updatedRequests);
+                return updatedRequests;
+            });
+            setRequestsCount((prev) => Math.max(prev - 1, 0));
+        };
+
+        socket.on("updateRequestCount", handleUpdateRequestCount);
+        socket.on("requestCreated", handleRequestCreated);
+        socket.on("requestUpdated", handleRequestUpdated);
+        socket.on("requestDeleted", handleRequestDeleted);
+        socket.on("updateRequests", handleUpdateRequests);
 
         return () => {
-            socket.off("updateRequestCount");
-            socket.off("requestCreated");
-            socket.off("requestUpdated");
-            socket.off("requestDeleted");
-            socket.off("paymentUpdated");
+            socket.off("updateRequestCount", handleUpdateRequestCount);
+            socket.off("requestCreated", handleRequestCreated);
+            socket.off("requestUpdated", handleRequestUpdated);
+            socket.off("requestDeleted", handleRequestDeleted);
+            socket.off("updateRequests", handleUpdateRequests);
         };
     }, []);
 
     return (
         <Sidebar>
-            <div>
-                <div className="image-slider-container">
-                    <div className="image-slider">
-                        <div className="slider-text">
-                            <h2
-                                style={{
-                                    fontFamily: "TrebuchetMS, sans-serif",
-                                    fontSize: "50px",
-                                }}
-                            >
-                                UPang Admin
-                                <br />
-                                Dashboard
-                            </h2>
-                        </div>
-                        <img
-                            src={sliderImages[currentSlide]}
-                            alt={`Slide ${currentSlide + 1}`}
-                            className="slider-image"
-                        />
-                        <div className="slider-dots">
-                            {sliderImages.map((_, index) => (
-                                <button
-                                    key={index}
-                                    className={`dot ${
-                                        currentSlide === index
-                                            ? "active-dot"
-                                            : ""
-                                    }`}
-                                    onClick={() => setCurrentSlide(index)}
-                                ></button>
-                            ))}
-                        </div>
+            <div className="image-slider-container">
+                <div className="image-slider">
+                    <div className="slider-text">
+                        <h2
+                            style={{
+                                fontFamily: "Trebuchet MS, sans-serif",
+                                fontSize: "50px",
+                            }}
+                        >
+                            UPang Admin Dashboard
+                        </h2>
+                    </div>
+                    <img
+                        src={sliderImages[currentSlide]}
+                        alt={`Slide ${currentSlide + 1}`}
+                        className="slider-image"
+                    />
+                    <div className="slider-dots">
+                        {sliderImages.map((_, index) => (
+                            <button
+                                key={index}
+                                className={`dot ${
+                                    currentSlide === index ? "active-dot" : ""
+                                }`}
+                                onClick={() => setCurrentSlide(index)}
+                            ></button>
+                        ))}
                     </div>
                 </div>
             </div>
-
             <div className="container-fluid">
                 <div className="row g-3 my-2">
-                    <div className="col-md-3">
+                    <div className="col-md-3 p-1">
                         <div className="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
                                 <h3 className="fs-2">
                                     {loading ? "Loading..." : requestsCount}
                                 </h3>
-
-                                <p className="fs-5">Request</p>
+                                <p className="fs-5">Requests</p>
+                            </div>
+                            <i className="bi bi-file-earmark-arrow-down p-3 fs-1"></i>
+                        </div>
+                    </div>
+                    <div className="col-md-3 p-1">
+                        <div className="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                            <div>
+                                <h3 className="fs-2">
+                                    {loading
+                                        ? "Loading..."
+                                        : processingRequestsCount}
+                                </h3>
+                                <p className="fs-5">Processing</p>
+                            </div>
+                            <i className="bi bi-file-earmark-arrow-down p-3 fs-1"></i>
+                        </div>
+                    </div>
+                    <div className="col-md-3 p-1">
+                        <div className="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                            <div>
+                                <h3 className="fs-2">
+                                    {loading
+                                        ? "Loading..."
+                                        : completedRequestsCount}
+                                </h3>
+                                <p className="fs-5">Completed</p>
                             </div>
                             <i className="bi bi-file-earmark-arrow-down p-3 fs-1"></i>
                         </div>
