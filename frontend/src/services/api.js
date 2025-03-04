@@ -106,6 +106,22 @@ export const createRequestedDocument = async ({
 };
 
 //get requests
+export const authToken = async () => {
+    try {
+        const response = await fetch(`${BASE_API_URL}/api/users`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch requests");
+        }
+
+        return data;
+    } catch (error) {
+        throw new Error(error.message || "Error fetching requests");
+    }
+};
+
+//get requests
 export const fetchRequests = async () => {
     try {
         const response = await fetch(`${BASE_API_URL}/request/requests`);

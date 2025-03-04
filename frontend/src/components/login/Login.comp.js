@@ -51,6 +51,7 @@ const LoginForm = ({ handleOnFormChange }) => {
 
             localStorage.setItem("token", result.token);
             localStorage.setItem("email", formData.email);
+            localStorage.setItem("register", "formData");
 
             console.log(result.token);
             setShowToast(true);
