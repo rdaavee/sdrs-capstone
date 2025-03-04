@@ -28,7 +28,6 @@ export const signOutUser = async () => {
         console.log("User signed out successfully");
 
         localStorage.removeItem("token");
-
     } catch (error) {
         console.error("Sign Out Error:", error.message);
     }
@@ -38,7 +37,7 @@ export const signInWithGoogle = async () => {
     try {
         await signOutUser();
 
-        await new Promise((resolve) => setTimeout(resolve, 1000)); 
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
@@ -46,6 +45,7 @@ export const signInWithGoogle = async () => {
 
         console.log("Google Sign-In Success:", user, "Token:", token);
         localStorage.setItem("token", token);
+        localStorage.setItem("email", user.email);
 
         return { user, token };
     } catch (error) {
@@ -58,7 +58,7 @@ export const signInWithEmail = async (email, password) => {
     try {
         await signOutUser();
 
-        await new Promise((resolve) => setTimeout(resolve, 1000)); 
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const userCredential = await signInWithEmailAndPassword(
             auth,
@@ -70,6 +70,7 @@ export const signInWithEmail = async (email, password) => {
 
         console.log("Email Login Success:", user, "Token:", token);
         localStorage.setItem("token", token);
+        localStorage.setItem("email", user.email);
 
         return { user, token };
     } catch (error) {

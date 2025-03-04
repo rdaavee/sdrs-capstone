@@ -31,6 +31,12 @@ const seedAdminAccounts = async () => {
                 email: "dave@gmail.com",
                 password: hashedPassword,
             })),
+            bcrypt.hash("123456", saltRounds).then((hashedPassword) => ({
+                name: "SDRS Account",
+                role: "user",
+                email: "sdrscodegenerator00@gmail.com",
+                password: hashedPassword,
+            })),
         ]);
 
         await User.deleteMany();

@@ -178,7 +178,6 @@ const EntryPage = () => {
         if (sendRequest) {
             setLoading(false);
 
-            // Ensure we are passing the latest formData including fees
             navigate("/confirm-request", {
                 state: { ...formData, documentFee: formData.documentFee || 0 },
             });
@@ -200,6 +199,62 @@ const EntryPage = () => {
             </div>
         );
     }
+
+    const handleSendCode = async () => {
+        const email = formData?.email || localStorage.getItem("email");
+        const token = localStorage.getItem("token");
+
+        console.log("Retrieved Email:", email);
+
+        if (!email) {
+            alert("Please enter your email.");
+            return;
+        }
+
+        const response = await fetch(
+            "http://localhost:5000/tracker/send-code",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ email }),
+            }
+        );
+
+        const data = await response.json();
+        alert(data.message);
+    };
+
+    const handleVerifyCode = async () => {
+        const { referenceNumber, code } = formData;
+
+        if (!referenceNumber || !code) {
+            alert("Please enter all fields.");
+            return;
+        }
+
+        const response = await fetch(
+            "http://localhost:5000/tracker/validate-and-verify",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ referenceNumber, code }),
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Tracking verified. Redirecting to tracker page...");
+            window.location.href = "/tracker-request";
+        } else {
+            alert(data.message);
+        }
+    };
 
     const handleTrackerRequest = async (e) => {
         e.preventDefault();
@@ -479,17 +534,26 @@ const EntryPage = () => {
                                         })
                                     }
                                 />
+                                <button
+                                    className="send-code-btn"
+                                    onClick={handleSendCode}
+                                >
+                                    Send Code
+                                </button>
                                 <input
                                     type="text"
-                                    placeholder="4-digit PIN"
-                                    className="input track-pin"
-                                    // onChange={(e) =>
-                                    //     setReferenceNumber(e.target.value)
-                                    // }
+                                    placeholder="Enter Code"
+                                    className="input track-code"
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            code: e.target.value,
+                                        })
+                                    }
                                 />
                                 <button
                                     className="track-button"
-                                    onClick={handleTrackerRequest}
+                                    onClick={handleVerifyCode}
                                 >
                                     Track
                                 </button>
