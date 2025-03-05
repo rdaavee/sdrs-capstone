@@ -108,3 +108,110 @@ td.action-cell {
     background-color: #ffd000;
     color: white;
 }
+
+.image-slider-container {
+    margin-top: 20px;
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+}
+
+.image-slider {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(90deg, #3a4f24 0%, #f7f7f7 100%);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
+}
+
+.slider-text {
+    flex: 1;
+    color: white;
+    z-index: 2;
+}
+
+.slider-image {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+}
+
+.dot {
+    width: 2px;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.active-dot {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.requests-icon {
+    background-color: #33b86c;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+}
+
+.request-count-box {
+    border: 5px solid rgba(51, 184, 109, 0.43);
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+.processing-icon {
+    background-color: #29b6f6;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+}
+
+.processing-count-box {
+    border: 5px solid rgba(41, 182, 246, 0.43);
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+.completed-icon {
+    background-color: #7e58c2;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+}
+
+.completed-count-box {
+    border: 5px solid rgba(126, 88, 194, 0.43);
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}

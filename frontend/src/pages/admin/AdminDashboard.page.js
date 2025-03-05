@@ -5,6 +5,9 @@ import { io } from "socket.io-client";
 import sliderImage1 from "../../assets/images/dashboard-slider-img1.svg";
 import sliderImage2 from "../../assets/images/dashboard-slider-img2.svg";
 import sliderImage3 from "../../assets/images/dashboard-slider-img3.svg";
+import requestsIcon from "../../assets/icons/new-request-icon.svg";
+import processingIcon from "../../assets/icons/processing-icon.svg";
+import completedIcon from "../../assets/icons/completed-icon.svg";
 
 const socket = io("http://localhost:5000");
 
@@ -80,9 +83,17 @@ const Dashboard = () => {
         };
 
         const handleRequestUpdated = (updatedRequest) => {
-            setRequests((prevRequests) => {
+            console.log("Prev Requests:", requests);
+            console.log("Updated Request:", updatedRequest);
+
+            if (!updatedRequest || !updatedRequest._id) {
+                console.error("Invalid updated request:", updatedRequest);
+                return;
+            }
+
+            setRequests((prevRequests = []) => {
                 const updatedRequests = prevRequests.map((req) =>
-                    req.id === updatedRequest.id ? updatedRequest : req
+                    req._id === updatedRequest._id ? updatedRequest : req
                 );
                 updateRequestCounts(updatedRequests);
                 return updatedRequests;
@@ -156,18 +167,24 @@ const Dashboard = () => {
             <div className="container-fluid">
                 <div className="row g-3 my-2">
                     <div className="col-md-3 p-1">
-                        <div className="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                        <div className="request-count-box p-4 shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
                                 <h3 className="fs-2">
                                     {loading ? "Loading..." : requestsCount}
                                 </h3>
                                 <p className="fs-5">Requests</p>
                             </div>
-                            <i className="bi bi-file-earmark-arrow-down p-3 fs-1"></i>
+                            <img
+                                className="requests-icon"
+                                src={requestsIcon}
+                                alt="Requests Icon"
+                                width="60"
+                                height="60"
+                            />
                         </div>
                     </div>
                     <div className="col-md-3 p-1">
-                        <div className="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                        <div className="processing-count-box p-4 shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
                                 <h3 className="fs-2">
                                     {loading
@@ -176,11 +193,17 @@ const Dashboard = () => {
                                 </h3>
                                 <p className="fs-5">Processing</p>
                             </div>
-                            <i className="bi bi-file-earmark-arrow-down p-3 fs-1"></i>
+                            <img
+                                className="processing-icon"
+                                src={processingIcon}
+                                alt="Processing Icon"
+                                width="60"
+                                height="60"
+                            />
                         </div>
                     </div>
                     <div className="col-md-3 p-1">
-                        <div className="p-4 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                        <div className="completed-count-box p-4 shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
                                 <h3 className="fs-2">
                                     {loading
@@ -189,7 +212,13 @@ const Dashboard = () => {
                                 </h3>
                                 <p className="fs-5">Completed</p>
                             </div>
-                            <i className="bi bi-file-earmark-arrow-down p-3 fs-1"></i>
+                            <img
+                                className="completed-icon"
+                                src={completedIcon}
+                                alt="Completed Icon"
+                                width="60"
+                                height="60"
+                            />
                         </div>
                     </div>
                 </div>

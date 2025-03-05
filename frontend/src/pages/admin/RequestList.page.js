@@ -64,24 +64,29 @@ const RequestList = () => {
                 `http://localhost:5000/request/update/${id}`,
                 {
                     method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ status: newStatus }),
                 }
             );
 
-            if (!response.ok) {
-                throw new Error("Failed to update status");
+            if (!response.ok) throw new Error("Failed to update status");
+
+            const data = await response.json();
+            const updatedRequest = data.request;
+
+            if (!updatedRequest || !updatedRequest._id) {
+                console.error(
+                    "Invalid updated request from server:",
+                    updatedRequest
+                );
+                return;
             }
 
-            socket.emit("requestUpdated", { id, newStatus });
+            socket.emit("requestUpdated", updatedRequest);
 
             setRequests((prevRequests) =>
                 prevRequests.map((request) =>
-                    request._id === id
-                        ? { ...request, status: newStatus }
-                        : request
+                    request._id === id ? updatedRequest : request
                 )
             );
 
