@@ -21,6 +21,9 @@ const EntryPage = () => {
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const [showWarningToast, setShowWarningToast] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
+    const [toastBg, setToastBg] = useState("success");
 
     const { isLoggedIn, userPhoto, handleLogout } = useAuth();
     const { isOpen } = useOfficeHours();
@@ -207,71 +210,103 @@ const EntryPage = () => {
         console.log("Retrieved Email:", email);
 
         if (!email) {
-            alert("Please enter your email.");
+            setToastMessage("Please enter your email.");
+            setToastBg("danger");
+            setShowToast(true);
             return;
         }
 
-        const response = await fetch(
-            "http://localhost:5000/tracker/send-code",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ email }),
-            }
-        );
+        try {
+            const response = await fetch(
+                "http://localhost:5000/tracker/send-code",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ email }),
+                }
+            );
 
-        const data = await response.json();
-        alert(data.message);
+            const data = await response.json();
+
+            setToastMessage(data.message);
+            setToastBg(data.success ? "success" : "danger");
+            setShowToast(true);
+        } catch (error) {
+            setToastMessage("An error occurred. Please try again.");
+            setToastBg("danger");
+            setShowToast(true);
+        }
     };
 
-    const handleVerifyCode = async () => {
+    const handleVerifyCode = async (e) => {
+        e.preventDefault();
         const { referenceNumber, code } = formData;
 
         if (!referenceNumber || !code) {
-            alert("Please enter all fields.");
+            setToastMessage("Please enter all fields.");
+            setToastBg("danger");
+            setShowToast(true);
             return;
         }
 
-        const response = await fetch(
-            "http://localhost:5000/tracker/validate-and-verify",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ referenceNumber, code }),
-            }
-        );
-
-        const data = await response.json();
-
-        if (data.success) {
-            alert("Tracking verified. Redirecting to tracker page...");
-            window.location.href = "/tracker-request";
-        } else {
-            alert(data.message);
-        }
-    };
-
-    const handleTrackerRequest = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-
         try {
-            const data = await fetchTrackerRequest(formData.referenceNumber);
+            const response = await fetch(
+                "http://localhost:5000/tracker/validate-and-verify",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ referenceNumber, code }),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!data.success) {
+                setToastMessage("Invalid reference number or code.");
+                setToastBg("danger");
+                setShowToast(true);
+                return;
+            }
+
+            setLoading(true);
+
+            const trackerData = await fetchTrackerRequest(referenceNumber);
 
             setTimeout(() => {
                 setLoading(false);
-                navigate("/tracker-request", { state: data });
+                setToastMessage("Tracking verified! Redirecting...");
+                setToastBg("success");
+                setShowToast(true);
+                navigate("/tracker-request", { state: trackerData });
             }, 1500);
         } catch (error) {
-            setLoading(false);
-            alert(error.message);
+            setToastMessage("An error occurred. Please try again.");
+            setToastBg("danger");
+            setShowToast(true);
         }
     };
+
+    // const handleTrackerRequest = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     try {
+    //         const data = await fetchTrackerRequest(formData.referenceNumber);
+
+    //         setTimeout(() => {
+    //             setLoading(false);
+    //             navigate("/tracker-request", { state: data });
+    //         }, 1500);
+    //     } catch (error) {
+    //         setLoading(false);
+    //         alert(error.message);
+    //     }
+    // };
 
     return (
         <div className="document-request-container">
@@ -288,6 +323,23 @@ const EntryPage = () => {
                     </Toast.Header>
                     <Toast.Body className="text-dark">
                         You need to login first.
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
+
+            <ToastContainer position="bottom-end" className="p-3">
+                <Toast
+                    bg={toastBg}
+                    show={showToast}
+                    onClose={() => setShowToast(false)}
+                    delay={2000}
+                    autohide
+                >
+                    <Toast.Header>
+                        <strong className="me-auto">UPang Toast</strong>
+                    </Toast.Header>
+                    <Toast.Body className="text-white">
+                        {toastMessage}
                     </Toast.Body>
                 </Toast>
             </ToastContainer>
@@ -501,12 +553,11 @@ const EntryPage = () => {
                                 <h3>Advisory</h3>
                                 <hr />
                                 <p>
-                                    Your document request PIN (4-digit) together
-                                    with the REFERENCE NO. is required for
-                                    tracking.
-                                </p>
-                                <p>
-                                    Check your confirmation email for the PIN.
+                                    To track the status of your document
+                                    request, enter your REFERENCE NUMBER and
+                                    click Send Code to receive a code (4-digit)
+                                    via the email you used to log in. Then,
+                                    enter the code below to proceed.
                                 </p>
                             </div>
                         </div>
@@ -518,15 +569,16 @@ const EntryPage = () => {
                                     <span className="spanText">
                                         REFERENCE NUMBER
                                     </span>{" "}
-                                    and <span className="spanText">PIN</span>{" "}
+                                    and <span className="spanText">CODE</span>{" "}
                                     below to track your request.
                                 </p>
                             </div>
-                            <div className="tracker-inputs">
+                            {/* Reference Number Input & Send Code Button */}
+                            <div className="input-group">
                                 <input
                                     type="text"
                                     placeholder="Reference Number"
-                                    className="input track-reference"
+                                    className="input-field"
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
@@ -540,10 +592,14 @@ const EntryPage = () => {
                                 >
                                     Send Code
                                 </button>
+                            </div>
+
+                            {/* Code Input & Track Button */}
+                            <div className="input-group">
                                 <input
                                     type="text"
                                     placeholder="Enter Code"
-                                    className="input track-code"
+                                    className="input-field"
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,

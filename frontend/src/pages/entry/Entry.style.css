@@ -223,6 +223,47 @@ body {
     border-radius: 5px;
 }
 
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.input-field {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s ease;
+    margin-top: 5px;
+}
+
+.input-field:focus {
+    border-color: #03b335;
+}
+
+.send-code-btn,
+.track-button {
+    padding: 14px 16px;
+    border: none;
+    background-color: #03b335;
+    color: white;
+    font-size: 16px;
+    margin-top: 5px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.send-code-btn:hover,
+.track-button:hover {
+    background-color: #04882a;
+}
+
 .pText {
     color: #8dcbd8;
     font-weight: 100;

@@ -4,11 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import dashboardIconDark from "../../assets/icons/dashboard-icon-dark.svg";
 import createTicketIconDark from "../../assets/icons/create-ticket-icon-dark.svg";
-import ticketStatusIconDark from "../../assets/icons/ticket-status-icon-dark.svg";
 
 import dashboardIconLight from "../../assets/icons/dashboard-icon.svg";
 import createTicketIconLight from "../../assets/icons/create-ticket-icon.svg";
-import ticketStatusIconLight from "../../assets/icons/ticket-status-icon.svg";
 
 import "../../assets/fonts/fonts.css";
 import "../sidebar.style.css";
@@ -104,10 +102,10 @@ const Sidebar = ({ children }) => {
                         />
                         Dashboard
                     </Nav.Link>
-                    {/* <Nav.Link
-                        href="/add-ticket"
+                    <Nav.Link
+                        href="/request-list"
                         className={`mb-3 d-flex align-items-center ${
-                            isActive("/add-ticket")
+                            isActive("/request-list")
                                 ? "active-link rounded"
                                 : "text-dark"
                         }`}
@@ -115,7 +113,7 @@ const Sidebar = ({ children }) => {
                     >
                         <img
                             src={
-                                isActive("/add-ticket")
+                                isActive("/request-list")
                                     ? createTicketIconLight
                                     : createTicketIconDark
                             }
@@ -124,9 +122,9 @@ const Sidebar = ({ children }) => {
                             height={20}
                             className="me-2"
                         />
-                        Create New Ticket
+                        Request List
                     </Nav.Link>
-                    <Nav.Link
+                    {/* <Nav.Link
                         href="/tickets"
                         className={`mb-3 d-flex align-items-center ${
                             isActive("/tickets")
@@ -230,10 +228,10 @@ const Sidebar = ({ children }) => {
                             />
                             Dashboard
                         </Nav.Link>
-                        {/* <Nav.Link
-                            href="/add-ticket"
+                        <Nav.Link
+                            href="/request-list"
                             className={`mb-3 d-flex align-items-center ${
-                                isActive("/add-ticket")
+                                isActive("/request-list")
                                     ? "active-link rounded"
                                     : "text-dark"
                             }`}
@@ -241,7 +239,7 @@ const Sidebar = ({ children }) => {
                         >
                             <img
                                 src={
-                                    isActive("/add-ticket")
+                                    isActive("/request-list")
                                         ? createTicketIconLight
                                         : createTicketIconDark
                                 }
@@ -250,9 +248,9 @@ const Sidebar = ({ children }) => {
                                 height={20}
                                 className="me-2"
                             />
-                            Create New Ticket
+                            Request List
                         </Nav.Link>
-                        <Nav.Link
+                        {/* <Nav.Link
                             href="/tickets"
                             className={`mb-3 d-flex align-items-center ${
                                 isActive("/tickets")

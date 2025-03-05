@@ -1,3 +1,23 @@
+input {
+    background-color: white;
+    border-left: 4px solid #33b86c;
+    border-right: 1px solid #adadad;
+    border-top: 1px solid #adadad;
+    border-bottom: 1px solid #adadad;
+    font-size: 15px;
+    width: 700px;
+}
+
+input::placeholder {
+    color: #adadad;
+}
+
+input:focus {
+    outline: none;
+    border-color: #33b86c;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -53,13 +73,13 @@ th {
 }
 
 .status-processing {
-    background-color: #ffcccc;
-    color: #d93025;
+    background-color: rgba(41, 182, 246, 0.43);
+    color: #29b6f6;
 }
 
 .status-ready {
-    background-color: #bbdefb;
-    color: #1e88e5;
+    background-color: rgba(126, 88, 194, 0.43);
+    color: #7e58c2;
 }
 
 .status-completed {
@@ -71,17 +91,25 @@ td.action-cell {
     text-align: center;
 }
 
-.trash-icon {
+.fa-trash {
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    font-size: 15px;
+    color: #b1b1b1;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    margin: 10px;
+    padding: 15px;
+    background-color: rgba(163, 163, 163, 0.11);
 }
 
-.trash-icon:hover {
-    filter: invert(19%) sepia(88%) saturate(7496%) hue-rotate(357deg)
-        brightness(93%) contrast(119%);
-    transition: 0.2s;
+.fa-trash:hover {
+    color: red;
+    background-color: rgba(255, 0, 0, 0.11);
+    transition: 0.3s all;
 }
 
 .pagination-container {
@@ -93,7 +121,7 @@ td.action-cell {
 }
 
 .pagination-button {
-    padding: 0.5rem;
+    padding: 10px;
     border-radius: 5px;
     border: none;
     background-color: #e0e0e0;
@@ -101,11 +129,16 @@ td.action-cell {
 }
 
 .pagination-button:hover {
-    background-color: #d6d6d6;
+    background-color: #c5c5c5;
 }
 
 .pagination-button.active {
     background-color: #ffd000;
+    color: white;
+}
+
+.pagination-button.active:hover {
+    background-color: #e7c014;
     color: white;
 }
 
@@ -175,14 +208,14 @@ td.action-cell {
 }
 
 .requests-icon {
-    background-color: #33b86c;
+    background-color: #7e58c2;
     border-radius: 8px;
     padding: 10px;
     color: white;
 }
 
 .request-count-box {
-    border: 5px solid rgba(51, 184, 109, 0.43);
+    border: 5px solid rgba(126, 88, 194, 0.43);
     border-right: none;
     border-top: none;
     border-bottom: none;
@@ -203,15 +236,20 @@ td.action-cell {
 }
 
 .completed-icon {
-    background-color: #7e58c2;
+    background-color: #33b86c;
     border-radius: 8px;
     padding: 10px;
     color: white;
 }
 
 .completed-count-box {
-    border: 5px solid rgba(126, 88, 194, 0.43);
+    border: 5px solid rgba(51, 184, 109, 0.43);
     border-right: none;
     border-top: none;
     border-bottom: none;
+}
+
+.highlight {
+    background-color: #e0e0e0;
+    font-weight: bold;
 }
